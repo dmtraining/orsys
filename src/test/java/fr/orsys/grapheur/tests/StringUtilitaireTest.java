@@ -79,7 +79,8 @@ public class StringUtilitaireTest {
 		w1="9ORSYS";
 		w2=StringUtilitaire.premiereLettreMajuscule(w1);
 		System.out.println("** Test premierCaracterePasLettre conversion obtenue : " + w2 ); 
-		assertEquals("9ORSYS",w2);
+		//assertEquals("9ORSYS",w2);
+		assertEquals("8ORSYS",w2);
 	}
 
 
