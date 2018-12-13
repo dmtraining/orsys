@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EquationParametrique.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.equation</a> &gt; <span class="el_source">EquationParametrique.java</span></div><h1>EquationParametrique.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.equation;
+
+import fr.orsys.grapheur.graphe.fonction.Fonction;
+
+/**
+ * equation du type x = f(t), y = g(t)
+ * 
+ * @author guehenneux
+ * 
+ */
+public class EquationParametrique implements Equation {
+
+	private Fonction f;
+
+	private Fonction g;
+
+	/**
+	 * @param f
+	 * @param g
+	 */
+<span class="nc" id="L21">	public EquationParametrique(Fonction f, Fonction g) {</span>
+
+<span class="nc" id="L23">		this.f = f;</span>
+<span class="nc" id="L24">		this.g = g;</span>
+
+<span class="nc" id="L26">	}</span>
+
+	/**
+	 * @return the f
+	 */
+	public Fonction getF() {
+<span class="nc" id="L32">		return f;</span>
+	}
+
+	/**
+	 * @param f
+	 *            the f to set
+	 */
+	public void setF(Fonction f) {
+<span class="nc" id="L40">		this.f = f;</span>
+<span class="nc" id="L41">	}</span>
+
+	/**
+	 * @return the g
+	 */
+	public Fonction getG() {
+<span class="nc" id="L47">		return g;</span>
+	}
+
+	/**
+	 * @param g
+	 *            the g to set
+	 */
+	public void setG(Fonction g) {
+<span class="nc" id="L55">		this.g = g;</span>
+<span class="nc" id="L56">	}</span>
+
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public double getX(double t) {
+<span class="nc" id="L64">		return f.evaluer(t);</span>
+	}
+
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public double getY(double t) {
+<span class="nc" id="L73">		return g.evaluer(t);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>StringUtilitaire.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire</a> &gt; <span class="el_source">StringUtilitaire.java</span></div><h1>StringUtilitaire.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+<span class="nc" id="L8">public class StringUtilitaire {</span>
+
+	private static final String SUSPENSION = &quot;...&quot;;
+<span class="fc" id="L11">	private static final int LONGUEUR_SUSPENSION = SUSPENSION.length();</span>
+
+	private static final int MIN = 192;
+
+	private static final int MAX = 255;
+
+<span class="fc" id="L17">	private static final String[] REMPLACEMENT_SANS_ACCENT = initialiserTableSansAccent();</span>
+
+	private static String[] initialiserTableSansAccent() {
+
+<span class="fc" id="L21">		String[] tableSansAccent = new String[MAX - MIN + 1];</span>
+
+<span class="fc" id="L23">		int indexCaractere = 0;</span>
+
+<span class="fc" id="L25">		java.lang.String remplacement = null;</span>
+
+<span class="fc" id="L27">		remplacement = &quot;A&quot;;</span>
+<span class="fc" id="L28">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L29">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L30">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L31">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L32">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L33">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L35">		remplacement = &quot;AE&quot;;</span>
+<span class="fc" id="L36">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L37">		remplacement = &quot;C&quot;;</span>
+
+<span class="fc" id="L39">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L41">		remplacement = &quot;E&quot;;</span>
+<span class="fc" id="L42">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L43">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L44">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L45">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L47">		remplacement = &quot;I&quot;;</span>
+<span class="fc" id="L48">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L49">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L50">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L51">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L53">		remplacement = &quot;D&quot;;</span>
+<span class="fc" id="L54">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L56">		remplacement = &quot;N&quot;;</span>
+<span class="fc" id="L57">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L59">		remplacement = &quot;O&quot;;</span>
+<span class="fc" id="L60">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L61">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L62">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L63">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L64">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L66">		remplacement = &quot;x&quot;;</span>
+<span class="fc" id="L67">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L69">		remplacement = &quot;O&quot;;</span>
+<span class="fc" id="L70">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L72">		remplacement = &quot;U&quot;;</span>
+<span class="fc" id="L73">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L74">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L75">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L76">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L78">		remplacement = &quot;Y&quot;;</span>
+<span class="fc" id="L79">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L81">		remplacement = &quot;b&quot;;</span>
+<span class="fc" id="L82">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L84">		remplacement = &quot;B&quot;;</span>
+<span class="fc" id="L85">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L87">		remplacement = &quot;a&quot;;</span>
+<span class="fc" id="L88">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L89">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L90">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L91">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L92">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L93">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L95">		remplacement = &quot;ae&quot;;</span>
+<span class="fc" id="L96">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L98">		remplacement = &quot;c&quot;;</span>
+<span class="fc" id="L99">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L101">		remplacement = &quot;e&quot;;</span>
+<span class="fc" id="L102">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L103">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L104">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L105">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L107">		remplacement = &quot;i&quot;;</span>
+<span class="fc" id="L108">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L109">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L110">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L111">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L113">		remplacement = &quot;d&quot;;</span>
+<span class="fc" id="L114">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L116">		remplacement = &quot;n&quot;;</span>
+<span class="fc" id="L117">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L119">		remplacement = &quot;o&quot;;</span>
+<span class="fc" id="L120">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L121">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L122">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L123">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L124">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L126">		remplacement = &quot; &quot;;</span>
+<span class="fc" id="L127">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L129">		remplacement = &quot;o&quot;;</span>
+<span class="fc" id="L130">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L132">		remplacement = &quot;u&quot;;</span>
+<span class="fc" id="L133">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L134">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L135">		tableSansAccent[indexCaractere++] = remplacement;</span>
+<span class="fc" id="L136">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L138">		remplacement = &quot;y&quot;;</span>
+<span class="fc" id="L139">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L141">		remplacement = &quot;b&quot;;</span>
+<span class="fc" id="L142">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L144">		remplacement = &quot;y&quot;;</span>
+<span class="fc" id="L145">		tableSansAccent[indexCaractere++] = remplacement;</span>
+
+<span class="fc" id="L147">		return tableSansAccent;</span>
+
+	}
+
+	/**
+	 * @param chaine
+	 *            une chaine de caractere contenant au moins un caractere
+	 * @return une chaine de caractere egale, mais avec le premier caractere en
+	 *         majuscule
+	 */
+	public static final String premiereLettreMajuscule(String chaine) {
+
+		String resultat;
+
+<span class="fc" id="L161">		char premiereLettre = chaine.charAt(0);</span>
+<span class="fc" id="L162">		String resteChaine = chaine.substring(1);</span>
+<span class="fc" id="L163">		char premiereLettreMajuscule = Character.toUpperCase(premiereLettre);</span>
+<span class="fc" id="L164">		resultat = premiereLettreMajuscule + resteChaine;</span>
+
+<span class="fc" id="L166">		return resultat;</span>
+
+	}
+
+	/**
+	 * Transforme une chaine pouvant contenir des accents dans une version sans
+	 * accent
+	 * 
+	 * @param chaine
+	 *            Chaine a convertir sans accent
+	 * @return Chaine dont les accents ont été supprimé
+	 */
+	public static final String normaliser(String chaine) {
+
+<span class="fc" id="L180">		chaine = chaine.toLowerCase();</span>
+
+<span class="fc" id="L182">		int longueurChaine = chaine.length();</span>
+<span class="fc" id="L183">		StringBuilder builderChaineNormalisee = new StringBuilder();</span>
+
+		char caractere;
+		String remplacement;
+
+<span class="fc bfc" id="L188" title="All 2 branches covered.">		for (int indexCaractere = 0; indexCaractere &lt; longueurChaine; indexCaractere++) {</span>
+
+<span class="fc" id="L190">			caractere = chaine.charAt(indexCaractere);</span>
+
+<span class="fc bfc" id="L192" title="All 4 branches covered.">			if (caractere &gt;= MIN &amp;&amp; caractere &lt;= MAX) {</span>
+<span class="fc" id="L193">				remplacement = REMPLACEMENT_SANS_ACCENT[caractere - MIN];</span>
+<span class="pc bpc" id="L194" title="1 of 4 branches missed.">			} else if (caractere &lt; 'A' || caractere &gt; 'Z') {</span>
+<span class="fc" id="L195">				remplacement = &quot; &quot;;</span>
+<span class="fc" id="L196">			} else {</span>
+<span class="nc" id="L197">				remplacement = Character.toString(caractere);</span>
+			}
+
+<span class="fc" id="L200">			builderChaineNormalisee.append(remplacement);</span>
+
+		}
+
+<span class="fc" id="L204">		return builderChaineNormalisee.toString();</span>
+
+	}
+
+	/**
+	 * 
+	 * @param objet
+	 * @param longueurMaximale
+	 * @param suspension
+	 * @param remplissage
+	 * @param caractereRemplissage
+	 * @return
+	 */
+	public static final String formater(Object objet, int longueurMaximale,
+			boolean suspension, boolean remplissage, char caractereRemplissage) {
+
+<span class="nc" id="L220">		String chaine = objet.toString();</span>
+
+<span class="nc" id="L222">		int longueurChaine = chaine.length();</span>
+
+<span class="nc bnc" id="L224" title="All 2 branches missed.">		if (longueurChaine &gt; longueurMaximale) {</span>
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">			if (suspension) {</span>
+
+<span class="nc bnc" id="L228" title="All 2 branches missed.">				if (LONGUEUR_SUSPENSION &gt; longueurMaximale) {</span>
+
+<span class="nc" id="L230">					chaine = SUSPENSION.substring(longueurMaximale);</span>
+
+<span class="nc" id="L232">				} else {</span>
+
+<span class="nc" id="L234">					chaine = chaine.substring(0, longueurMaximale</span>
+<span class="nc" id="L235">							- LONGUEUR_SUSPENSION);</span>
+<span class="nc" id="L236">					chaine += SUSPENSION;</span>
+
+				}
+
+<span class="nc" id="L240">			} else {</span>
+
+<span class="nc" id="L242">				chaine = chaine.substring(0, longueurMaximale);</span>
+
+			}
+
+<span class="nc bnc" id="L246" title="All 2 branches missed.">		} else if (longueurChaine &lt; longueurMaximale) {</span>
+
+<span class="nc" id="L248">			StringBuilder fabriqueChaine = new StringBuilder(chaine);</span>
+
+<span class="nc bnc" id="L250" title="All 2 branches missed.">			for (int i = longueurChaine; i &lt; longueurMaximale; i++) {</span>
+<span class="nc" id="L251">				fabriqueChaine.append(caractereRemplissage);</span>
+			}
+
+<span class="nc" id="L254">			chaine = fabriqueChaine.toString();</span>
+
+		}
+
+<span class="nc" id="L258">		return chaine;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

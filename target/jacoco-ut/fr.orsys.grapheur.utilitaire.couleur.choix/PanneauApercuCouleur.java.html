@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauApercuCouleur.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.couleur.choix</a> &gt; <span class="el_source">PanneauApercuCouleur.java</span></div><h1>PanneauApercuCouleur.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.couleur.choix;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
+import javax.swing.JPanel;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PanneauApercuCouleur extends JPanel {
+
+	/**
+	 * UID genere le 17/06/2010
+	 */
+	private static final long serialVersionUID = 3359866459613760836L;
+
+	private static final int TAILLE = 128;
+
+	private ChoixCouleur choixCouleur;
+
+	/**
+	 * 
+	 * @param choixCouleur
+	 */
+<span class="nc" id="L31">	public PanneauApercuCouleur(ChoixCouleur choixCouleur) {</span>
+
+<span class="nc" id="L33">		this.choixCouleur = choixCouleur;</span>
+
+<span class="nc" id="L35">		setPreferredSize(new Dimension(TAILLE, TAILLE));</span>
+
+<span class="nc" id="L37">	}</span>
+
+	@Override
+	public void paint(Graphics graphique) {
+
+<span class="nc" id="L42">		Color couleur = choixCouleur.getCouleur();</span>
+
+<span class="nc" id="L44">		Graphics2D graphique2D = (Graphics2D) graphique;</span>
+<span class="nc" id="L45">		graphique2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,</span>
+<span class="nc" id="L46">				RenderingHints.VALUE_ANTIALIAS_ON);</span>
+
+<span class="nc" id="L48">		graphique2D.setColor(getBackground());</span>
+<span class="nc" id="L49">		graphique2D.fillRect(0, 0, getWidth(), getHeight());</span>
+
+<span class="nc" id="L51">		graphique2D.setColor(Color.BLACK);</span>
+<span class="nc" id="L52">		graphique2D.fillArc(0, 0, TAILLE, TAILLE, 90, 180);</span>
+
+<span class="nc" id="L54">		graphique2D.setColor(Color.WHITE);</span>
+<span class="nc" id="L55">		graphique2D.fillArc(0, 0, TAILLE, TAILLE, 270, 180);</span>
+
+<span class="nc" id="L57">		graphique2D.setColor(Color.WHITE);</span>
+<span class="nc" id="L58">		graphique2D.fillArc(TAILLE / 4, 0, TAILLE / 2, TAILLE / 2, 90, 180);</span>
+
+<span class="nc" id="L60">		graphique2D.setColor(Color.BLACK);</span>
+<span class="nc" id="L61">		graphique2D.fillArc(TAILLE / 4, TAILLE / 2, TAILLE / 2, TAILLE / 2,</span>
+<span class="nc" id="L62">				270, 180);</span>
+
+<span class="nc" id="L64">		graphique2D.setColor(couleur);</span>
+<span class="nc" id="L65">		graphique2D.fillOval(TAILLE / 4, TAILLE / 4, TAILLE / 2, TAILLE / 2);</span>
+
+<span class="nc" id="L67">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

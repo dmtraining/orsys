@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ErreurSyntaxe.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.grammaire</a> &gt; <span class="el_source">ErreurSyntaxe.java</span></div><h1>ErreurSyntaxe.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.grammaire;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/** 
+ * 
+ * @author guehenneux
+ * 
+ */
+public class ErreurSyntaxe extends Exception {
+
+	/**
+	 * UID genere le 16/06/2010
+	 */
+	private static final long serialVersionUID = -926772550077253865L;
+
+<span class="nc" id="L18">	private static final String SAUT_LIGNE = System.getProperty(</span>
+<span class="nc" id="L19">			&quot;line.separator&quot; ); //, &quot;\n&quot;);</span>
+
+	/**
+	 * 
+	 * @param cause
+	 */
+	public ErreurSyntaxe(ParseException cause) {
+<span class="nc" id="L26">		super(fabriquerMessage(cause));</span>
+<span class="nc" id="L27">	}</span>
+
+	/**
+	 * 
+	 * @param cause
+	 * @return
+	 */
+	private static final String fabriquerMessage(ParseException cause) {
+
+<span class="nc" id="L36">		StringBuilder fabriqueMessage = new StringBuilder();</span>
+
+<span class="nc" id="L38">		String[] imagesSymboles = CompilateurFonctionConstants.tokenImage;</span>
+<span class="nc" id="L39">		imagesSymboles[0] = &quot;&lt;FIN_DE_TEXTE&gt;&quot;;</span>
+
+<span class="nc" id="L41">		int ligne = cause.currentToken.next.beginLine;</span>
+<span class="nc" id="L42">		int colonne = cause.currentToken.next.beginColumn;</span>
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		boolean premierSymbole = colonne &lt;= 1;</span>
+
+<span class="nc" id="L46">		String symboleCourant = imagesSymboles[cause.currentToken.kind];</span>
+<span class="nc" id="L47">		String symboleSuivant = imagesSymboles[cause.currentToken.next.kind];</span>
+
+<span class="nc" id="L49">		int[][] symbolesAttendus = cause.expectedTokenSequences;</span>
+
+<span class="nc" id="L51">		List&lt;String&gt; listeSymbolesAttendus = new ArrayList&lt;String&gt;();</span>
+
+		String sequenceSymbolesString;
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		for (int[] sequenceSymboles : symbolesAttendus) {</span>
+
+<span class="nc" id="L57">			sequenceSymbolesString = &quot;&quot;;</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">			for (int symbole : sequenceSymboles) {</span>
+<span class="nc" id="L60">				sequenceSymbolesString += imagesSymboles[symbole];</span>
+			}
+
+<span class="nc" id="L63">			listeSymbolesAttendus.add(sequenceSymbolesString);</span>
+
+		}
+
+<span class="nc" id="L67">		fabriqueMessage.append(&quot;Le symbole &quot; + symboleSuivant</span>
+<span class="nc" id="L68">				+ &quot; ï¿½tait inattendu&quot;);</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		if (!premierSymbole) {</span>
+<span class="nc" id="L71">			fabriqueMessage.append(&quot; aprï¿½s le symbole &quot; + symboleCourant);</span>
+		}
+
+<span class="nc" id="L74">		fabriqueMessage.append(&quot; (ligne : &quot; + ligne + &quot;, colonne : &quot; + colonne</span>
+<span class="nc" id="L75">				+ &quot;).&quot; + SAUT_LIGNE + SAUT_LIGNE);</span>
+
+<span class="nc" id="L77">		fabriqueMessage.append(&quot;Un des symboles suivants ï¿½tait attendu : &quot;);</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		for (String symboleAttendu : listeSymbolesAttendus) {</span>
+<span class="nc" id="L80">			fabriqueMessage.append(SAUT_LIGNE + &quot;-   &quot; + symboleAttendu);</span>
+		}
+
+<span class="nc" id="L83">		return fabriqueMessage.toString();</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

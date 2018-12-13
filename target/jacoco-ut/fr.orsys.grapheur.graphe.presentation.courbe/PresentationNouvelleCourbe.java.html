@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PresentationNouvelleCourbe.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.courbe</a> &gt; <span class="el_source">PresentationNouvelleCourbe.java</span></div><h1>PresentationNouvelleCourbe.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package fr.orsys.grapheur.graphe.presentation.courbe;</span>
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import fr.orsys.grapheur.graphe.courbe.Courbe;
+import fr.orsys.grapheur.graphe.courbe.TypeCourbe;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PresentationNouvelleCourbe extends JDialog {
+
+	/**
+	 * UID genere le 24/06/2010
+	 */
+	private static final long serialVersionUID = -8476276040725610552L;
+
+	private static final String TITRE = &quot;Nouvelle courbe&quot;;
+
+	private ButtonGroup typesCourbe;
+
+	private TypeCourbe typeCourbeSelectionne;
+
+	private JLabel explication;
+
+	private BoutonTypeCourbe boutonCourbeCartesienne;
+	private BoutonTypeCourbe boutonCourbePolaire;
+	private BoutonTypeCourbe boutonCourbeParametrique;
+
+	private JButton creer;
+	private JButton annuler;
+
+	private boolean validation;
+
+	/**
+	 * 
+	 */
+	public PresentationNouvelleCourbe(Component composantParent) {
+
+<span class="nc" id="L55">		super(JOptionPane.getFrameForComponent(composantParent), TITRE, true);</span>
+
+<span class="nc" id="L57">		setDefaultCloseOperation(DISPOSE_ON_CLOSE);</span>
+
+<span class="nc" id="L59">		validation = false;</span>
+
+<span class="nc" id="L61">		setLayout(new GridBagLayout());</span>
+
+<span class="nc" id="L63">		creerComposants();</span>
+<span class="nc" id="L64">		ajouterComposants();</span>
+<span class="nc" id="L65">		ajouterEcouteurs();</span>
+
+<span class="nc" id="L67">		pack();</span>
+<span class="nc" id="L68">		setLocationRelativeTo(composantParent);</span>
+
+<span class="nc" id="L70">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+<span class="nc" id="L77">		explication = new JLabel(&quot;Choisissez le type de courbe :&quot;);</span>
+<span class="nc" id="L78">		explication.setFont(new Font(&quot;Dialog&quot;, Font.BOLD, 12));</span>
+
+<span class="nc" id="L80">		explication.setForeground(Color.BLUE);</span>
+
+<span class="nc" id="L82">		typesCourbe = new ButtonGroup();</span>
+
+<span class="nc" id="L84">		boutonCourbeCartesienne = new BoutonTypeCourbe(this,</span>
+<span class="nc" id="L85">				TypeCourbe.CARTESIENNE);</span>
+
+<span class="nc" id="L87">		boutonCourbeCartesienne.setSelected(true);</span>
+<span class="nc" id="L88">		typeCourbeSelectionne = TypeCourbe.CARTESIENNE;</span>
+
+<span class="nc" id="L90">		boutonCourbePolaire = new BoutonTypeCourbe(this, TypeCourbe.POLAIRE);</span>
+
+<span class="nc" id="L92">		boutonCourbeParametrique = new BoutonTypeCourbe(this,</span>
+<span class="nc" id="L93">				TypeCourbe.PARAMETRIQUE);</span>
+
+<span class="nc" id="L95">		creer = new JButton(&quot;Créer&quot;);</span>
+<span class="nc" id="L96">		annuler = new JButton(&quot;Annuler&quot;);</span>
+
+<span class="nc" id="L98">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterComposants() {
+
+<span class="nc" id="L105">		GridBagConstraints contraintes = new GridBagConstraints();</span>
+<span class="nc" id="L106">		contraintes.anchor = GridBagConstraints.LINE_START;</span>
+<span class="nc" id="L107">		Insets espacement = contraintes.insets;</span>
+
+<span class="nc" id="L109">		espacement.left = 5;</span>
+<span class="nc" id="L110">		espacement.bottom = 10;</span>
+<span class="nc" id="L111">		espacement.top = 10;</span>
+<span class="nc" id="L112">		espacement.right = 20;</span>
+
+<span class="nc" id="L114">		contraintes.gridx = 0;</span>
+<span class="nc" id="L115">		contraintes.gridy = 0;</span>
+<span class="nc" id="L116">		contraintes.gridwidth = 2;</span>
+<span class="nc" id="L117">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L118">		add(explication, contraintes);</span>
+
+<span class="nc" id="L120">		espacement.left = 20;</span>
+<span class="nc" id="L121">		espacement.bottom = 5;</span>
+<span class="nc" id="L122">		espacement.top = 5;</span>
+<span class="nc" id="L123">		espacement.right = 5;</span>
+
+<span class="nc" id="L125">		contraintes.gridx = 0;</span>
+<span class="nc" id="L126">		contraintes.gridy = 1;</span>
+<span class="nc" id="L127">		contraintes.gridwidth = 2;</span>
+<span class="nc" id="L128">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L129">		add(boutonCourbeCartesienne, contraintes);</span>
+
+<span class="nc" id="L131">		contraintes.gridx = 0;</span>
+<span class="nc" id="L132">		contraintes.gridy = 2;</span>
+<span class="nc" id="L133">		contraintes.gridwidth = 2;</span>
+<span class="nc" id="L134">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L135">		add(boutonCourbePolaire, contraintes);</span>
+
+<span class="nc" id="L137">		contraintes.gridx = 0;</span>
+<span class="nc" id="L138">		contraintes.gridy = 3;</span>
+<span class="nc" id="L139">		contraintes.gridwidth = 2;</span>
+<span class="nc" id="L140">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L141">		add(boutonCourbeParametrique, contraintes);</span>
+
+<span class="nc" id="L143">		espacement.top = 20;</span>
+		
+<span class="nc" id="L145">		contraintes.gridx = 0;</span>
+<span class="nc" id="L146">		contraintes.gridy = 4;</span>
+<span class="nc" id="L147">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L148">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L149">		add(creer, contraintes);</span>
+
+<span class="nc" id="L151">		contraintes.gridx = 1;</span>
+<span class="nc" id="L152">		contraintes.gridy = 4;</span>
+<span class="nc" id="L153">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L154">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L155">		add(annuler, contraintes);</span>
+
+<span class="nc" id="L157">		typesCourbe.add(boutonCourbeCartesienne);</span>
+<span class="nc" id="L158">		typesCourbe.add(boutonCourbePolaire);</span>
+<span class="nc" id="L159">		typesCourbe.add(boutonCourbeParametrique);</span>
+
+<span class="nc" id="L161">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterEcouteurs() {
+
+<span class="nc" id="L168">		creer.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L173">				validation = true;</span>
+<span class="nc" id="L174">				dispose();</span>
+
+<span class="nc" id="L176">			}</span>
+
+		});
+
+<span class="nc" id="L180">		annuler.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+<span class="nc" id="L184">				dispose();</span>
+<span class="nc" id="L185">			}</span>
+
+		});
+
+<span class="nc" id="L189">	}</span>
+
+	/**
+	 * @param typeCourbeSelectionne
+	 *            the typeCourbeSelectionne to set
+	 */
+	public final void setTypeCourbeSelectionne(TypeCourbe typeCourbeSelectionne) {
+<span class="nc" id="L196">		this.typeCourbeSelectionne = typeCourbeSelectionne;</span>
+<span class="nc" id="L197">	}</span>
+
+	/**
+	 * 
+	 * @return
+	 */
+	public final Courbe getCourbe() {
+
+		Courbe courbe;
+
+<span class="nc bnc" id="L207" title="All 2 branches missed.">		if (validation) {</span>
+<span class="nc" id="L208">			courbe = typeCourbeSelectionne.getCourbeDefaut();</span>
+<span class="nc" id="L209">		} else {</span>
+<span class="nc" id="L210">			courbe = null;</span>
+		}
+
+<span class="nc" id="L213">		return courbe;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CourbeParametrique.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.courbe</a> &gt; <span class="el_source">CourbeParametrique.java</span></div><h1>CourbeParametrique.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.courbe;
+
+import java.awt.Shape;
+import java.awt.geom.GeneralPath;
+
+import fr.orsys.grapheur.graphe.equation.Equation;
+import fr.orsys.grapheur.graphe.equation.EquationParametrique;
+import fr.orsys.grapheur.graphe.presentation.courbe.PanneauCourbeParametrique;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class CourbeParametrique extends CourbeAbstraite {
+
+	private EquationParametrique equation;
+
+	/**
+	 * 
+	 * @param nom
+	 * @param equation
+	 */
+	public CourbeParametrique(String nom, EquationParametrique equation) {
+
+<span class="nc" id="L26">		super(nom);</span>
+
+<span class="nc" id="L28">		this.equation = equation;</span>
+
+<span class="nc" id="L30">		presentation = new PanneauCourbeParametrique(this);</span>
+
+<span class="nc" id="L32">	}</span>
+
+	@Override
+	public Shape getForme() {
+
+<span class="nc" id="L37">		GeneralPath forme = new GeneralPath();</span>
+
+		double t;
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		for (t = min; t + pas &lt; max; t += pas) {</span>
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">			if (interpolee) {</span>
+<span class="nc" id="L44">				ajouterSegment(forme, t, t + pas);</span>
+<span class="nc" id="L45">			} else {</span>
+<span class="nc" id="L46">				ajouterPoint(forme, t);</span>
+			}
+
+		}
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		if (interpolee) {</span>
+<span class="nc" id="L52">			ajouterSegment(forme, t, max);</span>
+<span class="nc" id="L53">		} else {</span>
+<span class="nc" id="L54">			ajouterPoint(forme, max);</span>
+		}
+
+<span class="nc" id="L57">		return forme;</span>
+
+	}
+
+	/**
+	 * 
+	 * @param forme
+	 * @param t
+	 */
+	private void ajouterPoint(GeneralPath forme, double t) {
+
+<span class="nc" id="L68">		double x = equation.getX(t);</span>
+<span class="nc" id="L69">		double y = equation.getY(t);</span>
+
+<span class="nc" id="L71">		ajouterSegment(forme, x, y, x, y);</span>
+
+<span class="nc" id="L73">	}</span>
+
+	/**
+	 * 
+	 * @param forme
+	 * @param t0
+	 * @param t1
+	 */
+	private void ajouterSegment(GeneralPath forme, double t0, double t1) {
+
+<span class="nc" id="L83">		double x0 = equation.getX(t0);</span>
+<span class="nc" id="L84">		double y0 = equation.getY(t0);</span>
+
+<span class="nc" id="L86">		double x1 = equation.getX(t1);</span>
+<span class="nc" id="L87">		double y1 = equation.getY(t1);</span>
+
+<span class="nc" id="L89">		ajouterSegment(forme, x0, y0, x1, y1);</span>
+
+<span class="nc" id="L91">	}</span>
+
+	@Override
+	public Equation getEquation() {
+<span class="nc" id="L95">		return equation;</span>
+	}
+
+	/**
+	 * 
+	 * @return l'equation parametrique de la courbe
+	 */
+	public EquationParametrique getEquationParametrique() {
+<span class="nc" id="L103">		return equation;</span>
+	}
+
+	@Override
+	public TypeCourbe getType() {
+<span class="nc" id="L108">		return TypeCourbe.PARAMETRIQUE;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FabriqueFonction.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.fonction.fabrique</a> &gt; <span class="el_source">FabriqueFonction.java</span></div><h1>FabriqueFonction.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.fonction.fabrique;
+
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
+
+import fr.orsys.grapheur.graphe.fonction.Addition;
+import fr.orsys.grapheur.graphe.fonction.Constante;
+import fr.orsys.grapheur.graphe.fonction.Division;
+import fr.orsys.grapheur.graphe.fonction.Fonction;
+import fr.orsys.grapheur.graphe.fonction.Identite;
+import fr.orsys.grapheur.graphe.fonction.Multiplication;
+import fr.orsys.grapheur.graphe.fonction.Opposition;
+import fr.orsys.grapheur.graphe.fonction.Soustraction;
+import fr.orsys.grapheur.graphe.grammaire.CompilateurFonction;
+import fr.orsys.grapheur.graphe.grammaire.ErreurSyntaxe;
+import fr.orsys.grapheur.graphe.grammaire.ParseException;
+import fr.orsys.grapheur.utilitaire.StringUtilitaire;
+import fr.orsys.grapheur.utilitaire.introspection.ExceptionIntrospection;
+import fr.orsys.grapheur.utilitaire.introspection.IntrospectionUtilitaire;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class FabriqueFonction {
+
+	private static final String PACKAGE_FONCTIONS = &quot;fr.orsys.grapheur.graphe.fonction.dictionnaire&quot;;
+
+	private static FabriqueFonction instance;
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static synchronized FabriqueFonction getInstance() {
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">		if (instance == null) {</span>
+<span class="nc" id="L40">			instance = new FabriqueFonction();</span>
+		}
+
+<span class="nc" id="L43">		return instance;</span>
+
+	}
+
+	/**
+	 * 
+	 */
+<span class="nc" id="L50">	private FabriqueFonction() {</span>
+
+<span class="nc" id="L52">	}</span>
+
+	/**
+	 * 
+	 * @param sousFonction0
+	 * @param sousFonction1
+	 * @return
+	 */
+	public Fonction creerAddition(Fonction sousFonction0, Fonction sousFonction1) {
+<span class="nc" id="L61">		return new Addition(sousFonction0, sousFonction1);</span>
+	}
+
+	/**
+	 * 
+	 * @param sousFonction0
+	 * @param sousFonction1
+	 * @return
+	 */
+	public Fonction creerSoustraction(Fonction sousFonction0,
+			Fonction sousFonction1) {
+<span class="nc" id="L72">		return new Soustraction(sousFonction0, sousFonction1);</span>
+	}
+
+	/**
+	 * 
+	 * @param sousFonction0
+	 * @param sousFonction1
+	 * @return
+	 */
+	public Fonction creerMultiplication(Fonction sousFonction0,
+			Fonction sousFonction1) {
+<span class="nc" id="L83">		return new Multiplication(sousFonction0, sousFonction1);</span>
+	}
+
+	/**
+	 * 
+	 * @param sousFonction0
+	 * @param sousFonction1
+	 * @return
+	 */
+	public Fonction creerDivision(Fonction sousFonction0, Fonction sousFonction1) {
+<span class="nc" id="L93">		return new Division(sousFonction0, sousFonction1);</span>
+	}
+
+	/**
+	 * 
+	 * @param valeur
+	 * @return
+	 */
+	public Fonction creerConstante(double valeur) {
+<span class="nc" id="L102">		return new Constante(valeur);</span>
+	}
+
+	/**
+	 * 
+	 * @param nomVariable
+	 * @return
+	 */
+	public Fonction creerIdentite(String nomVariable) {
+<span class="nc" id="L111">		return new Identite(nomVariable);</span>
+	}
+
+	/**
+	 * 
+	 * @param sousFonction
+	 * @return
+	 */
+	public Fonction creerOpposition(Fonction sousFonction) {
+<span class="nc" id="L120">		return new Opposition(sousFonction);</span>
+	}
+
+	/**
+	 * 
+	 * @param nomFonction
+	 * @param sousFonctions
+	 * @throws ClassNotFoundException
+	 * @throws ExceptionIntrospection
+	 */
+	public Fonction creerFonction(String nomFonction,
+			List&lt;Fonction&gt; sousFonctions) {
+
+		Fonction fonction;
+
+		try {
+
+<span class="nc" id="L137">			String nomClasse = StringUtilitaire</span>
+<span class="nc" id="L138">					.premiereLettreMajuscule(nomFonction);</span>
+<span class="nc" id="L139">			Class&lt;?&gt; classe = Class</span>
+<span class="nc" id="L140">					.forName(PACKAGE_FONCTIONS + '.' + nomClasse);</span>
+
+<span class="nc" id="L142">			int arite = sousFonctions.size();</span>
+<span class="nc" id="L143">			Fonction[] tableauSousFonctions = new Fonction[arite];</span>
+<span class="nc" id="L144">			sousFonctions.toArray(tableauSousFonctions);</span>
+<span class="nc" id="L145">			Class&lt;?&gt;[] typesParametres = new Class&lt;?&gt;[arite];</span>
+<span class="nc" id="L146">			Arrays.fill(typesParametres, Fonction.class);</span>
+
+<span class="nc" id="L148">			fonction = (Fonction) IntrospectionUtilitaire.creerInstance(classe,</span>
+<span class="nc" id="L149">					typesParametres, tableauSousFonctions);</span>
+
+<span class="nc" id="L151">		} catch (Exception cause) {</span>
+
+<span class="nc" id="L153">			RuntimeException exception = new RuntimeException(cause);</span>
+<span class="nc" id="L154">			throw exception;</span>
+
+		}
+
+<span class="nc" id="L158">		return fonction;</span>
+
+	}
+
+	/**
+	 * compile une fonction a partir de son texte, renvoit les erreurs de
+	 * syntaxe
+	 * 
+	 * @param texteFonction
+	 *            texte de la fonction
+	 * @return la fonction compilee
+	 * @throws ErreurSyntaxe
+	 *             en cas d'erreur de syntaxe (symboles manquants ou inatendus)
+	 */
+	public Fonction creerFonction(String texteFonction) throws ErreurSyntaxe {
+
+<span class="nc" id="L174">		CompilateurFonction compilateur = new CompilateurFonction(</span>
+<span class="nc" id="L175">				new StringReader(texteFonction));</span>
+
+		Fonction fonction;
+
+		try {
+<span class="nc" id="L180">			fonction = compilateur.compilerFonction();</span>
+<span class="nc" id="L181">		} catch (ParseException cause) {</span>
+<span class="nc" id="L182">			throw new ErreurSyntaxe(cause);</span>
+		}
+
+<span class="nc" id="L185">		return fonction;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

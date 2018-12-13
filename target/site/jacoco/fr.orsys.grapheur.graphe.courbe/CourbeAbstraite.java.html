@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CourbeAbstraite.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.courbe</a> &gt; <span class="el_source">CourbeAbstraite.java</span></div><h1>CourbeAbstraite.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.courbe;
+
+import java.awt.Color;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
+
+import fr.orsys.grapheur.graphe.presentation.courbe.PanneauCourbe;
+
+/**
+ * classe abstraite definissant une courbe quelconque
+*
+* @author guehenneux
+* 
+ */
+public abstract class CourbeAbstraite implements Courbe {
+
+	protected String nom;
+
+	protected double min, max, pas;
+
+	protected boolean interpolee;
+
+	protected Color couleur;
+
+	protected PanneauCourbe presentation;
+
+	/**
+	 * 
+	 * @param nom
+	 */
+	public CourbeAbstraite(String nom) {
+<span class="nc" id="L32">		this(nom, Color.BLACK);</span>
+<span class="nc" id="L33">	}</span>
+
+	/**
+	 * 
+	 * @param nom
+	 * @param couleur
+	 */
+<span class="nc" id="L40">	public CourbeAbstraite(String nom, Color couleur) {</span>
+
+<span class="nc" id="L42">		this.nom = nom;</span>
+<span class="nc" id="L43">		this.couleur = couleur;</span>
+
+<span class="nc" id="L45">		min = -10;</span>
+<span class="nc" id="L46">		max = 10;</span>
+<span class="nc" id="L47">		pas = 0.1;</span>
+<span class="nc" id="L48">		interpolee = true;</span>
+
+<span class="nc" id="L50">	}</span>
+
+	@Override
+	public final Color getCouleur() {
+<span class="nc" id="L54">		return couleur;</span>
+	}
+
+	@Override
+	public final void setCouleur(Color couleur) {
+
+<span class="nc" id="L60">		this.couleur = couleur;</span>
+
+<span class="nc" id="L62">		presentation.actualiserCouleurCourbe();</span>
+
+<span class="nc" id="L64">	}</span>
+
+	/**
+	 * @return the min
+	 */
+	public final double getMin() {
+<span class="nc" id="L70">		return min;</span>
+	}
+
+	/**
+	 * @param min
+	 *            the min to set
+	 */
+	public final void setMin(double min) {
+<span class="nc" id="L78">		this.min = min;</span>
+<span class="nc" id="L79">	}</span>
+
+	/**
+	 * @return the max
+	 */
+	public final double getMax() {
+<span class="nc" id="L85">		return max;</span>
+	}
+
+	@Override
+	public final void setMax(double max) {
+<span class="nc" id="L90">		this.max = max;</span>
+<span class="nc" id="L91">	}</span>
+
+	@Override
+	public final double getPas() {
+<span class="nc" id="L95">		return pas;</span>
+	}
+
+	@Override
+	public final void setPas(double pas) {
+<span class="nc" id="L100">		this.pas = pas;</span>
+<span class="nc" id="L101">	}</span>
+
+	@Override
+	public final boolean isInterpolee() {
+<span class="nc" id="L105">		return interpolee;</span>
+	}
+
+	@Override
+	public final void setInterpolee(boolean interpolee) {
+<span class="nc" id="L110">		this.interpolee = interpolee;</span>
+<span class="nc" id="L111">	}</span>
+
+	@Override
+	public final String getNom() {
+<span class="nc" id="L115">		return nom;</span>
+	}
+
+	@Override
+	public final void setNom(String nom) {
+<span class="nc" id="L120">		this.nom = nom;</span>
+<span class="nc" id="L121">	}</span>
+
+	@Override
+	public final String toString() {
+<span class="nc" id="L125">		return nom;</span>
+	}
+
+	@Override
+	public final PanneauCourbe getPresentation() {
+<span class="nc" id="L130">		return presentation;</span>
+	}
+
+	/**
+	 * 
+	 * @param forme
+	 * @param x0
+	 * @param y0
+	 * @param x1
+	 * @param y1
+	 */
+	protected static final void ajouterSegment(GeneralPath forme, double x0,
+			double y0, double x1, double y1) {
+
+<span class="nc" id="L144">		forme.append(new Line2D.Double(x0, y0, x1, y1), false);</span>
+
+<span class="nc" id="L146">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

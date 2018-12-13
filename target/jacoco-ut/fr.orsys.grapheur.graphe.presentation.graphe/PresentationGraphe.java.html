@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PresentationGraphe.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.graphe</a> &gt; <span class="el_source">PresentationGraphe.java</span></div><h1>PresentationGraphe.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.presentation.graphe;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+
+import fr.orsys.grapheur.graphe.Graphe;
+import fr.orsys.grapheur.graphe.courbe.Courbe;
+import fr.orsys.grapheur.graphe.presentation.courbe.PanneauCourbes;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PresentationGraphe extends JSplitPane {
+
+	/**
+	 * UID genere le 17/06/2010
+	 */
+	private static final long serialVersionUID = -6375669030883272767L;
+
+	private JSplitPane panneauHaut;
+	private JPanel panneauGauche;
+
+	private PanneauGraphe panneauGraphe;
+	private JScrollPane panneauGrapheAscenseurs;
+
+	private PanneauCoordonnees panneauCoordonnees;
+
+	private PanneauFenetre panneauFenetre;
+	private JScrollPane panneauFenetreAscenseurs;
+
+	private PanneauCourbes panneauCourbes;
+
+	private Graphe graphe;
+
+	/**
+	 * @param graphe
+	 */
+	public PresentationGraphe(Graphe graphe) {
+
+<span class="nc" id="L46">		super(VERTICAL_SPLIT);</span>
+
+<span class="nc" id="L48">		this.graphe = graphe;</span>
+
+<span class="nc" id="L50">		setOneTouchExpandable(true);</span>
+<span class="nc" id="L51">		setContinuousLayout(true);</span>
+
+<span class="nc" id="L53">		creerComposants();</span>
+<span class="nc" id="L54">		ajouterComposants();</span>
+
+<span class="nc" id="L56">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+<span class="nc" id="L63">		panneauHaut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);</span>
+<span class="nc" id="L64">		panneauHaut.setOneTouchExpandable(true);</span>
+<span class="nc" id="L65">		panneauHaut.setContinuousLayout(true);</span>
+
+<span class="nc" id="L67">		panneauGauche = new JPanel();</span>
+<span class="nc" id="L68">		panneauGauche.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L70">		panneauCoordonnees = new PanneauCoordonnees();</span>
+
+<span class="nc" id="L72">		panneauGraphe = new PanneauGraphe(graphe, panneauCoordonnees);</span>
+<span class="nc" id="L73">		panneauGrapheAscenseurs = new JScrollPane(panneauGraphe);</span>
+
+<span class="nc" id="L75">		panneauFenetre = new PanneauFenetre(graphe);</span>
+<span class="nc" id="L76">		panneauFenetreAscenseurs = new JScrollPane(panneauFenetre);</span>
+
+<span class="nc" id="L78">		panneauCourbes = new PanneauCourbes(graphe);</span>
+
+<span class="nc" id="L80">		panneauGauche.setMinimumSize(new Dimension(0, 0));</span>
+<span class="nc" id="L81">		panneauFenetre.setMinimumSize(new Dimension(0, 0));</span>
+<span class="nc" id="L82">		panneauCourbes.setMinimumSize(new Dimension(0, 0));</span>
+
+<span class="nc" id="L84">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterComposants() {
+
+<span class="nc" id="L91">		panneauGauche.add(panneauGrapheAscenseurs, BorderLayout.CENTER);</span>
+<span class="nc" id="L92">		panneauGauche.add(panneauCoordonnees, BorderLayout.SOUTH);</span>
+
+<span class="nc" id="L94">		panneauHaut.setLeftComponent(panneauGauche);</span>
+<span class="nc" id="L95">		panneauHaut.setRightComponent(panneauFenetreAscenseurs);</span>
+
+<span class="nc" id="L97">		setLeftComponent(panneauHaut);</span>
+<span class="nc" id="L98">		setRightComponent(panneauCourbes);</span>
+
+<span class="nc" id="L100">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiserFenetre() {
+<span class="nc" id="L106">		panneauFenetre.actualiser();</span>
+<span class="nc" id="L107">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiserGraphe() {
+<span class="nc" id="L113">		panneauGraphe.recalculerImage();</span>
+<span class="nc" id="L114">	}</span>
+
+	/**
+	 * 
+	 * @param courbe
+	 */
+	public final void ajouterCourbe(Courbe courbe) {
+<span class="nc" id="L121">		panneauCourbes.ajouterCourbe(courbe);</span>
+<span class="nc" id="L122">	}</span>
+
+	/**
+	 * 
+	 * @param courbe
+	 */
+	public final void supprimerCourbe(Courbe courbe) {
+<span class="nc" id="L129">		panneauCourbes.supprimerCourbe(courbe);</span>
+<span class="nc" id="L130">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiserListeCourbes() {
+<span class="nc" id="L136">		panneauCourbes.redessinerListeCourbes();</span>
+<span class="nc" id="L137">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

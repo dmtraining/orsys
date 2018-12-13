@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauFenetre.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.graphe</a> &gt; <span class="el_source">PanneauFenetre.java</span></div><h1>PanneauFenetre.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package fr.orsys.grapheur.graphe.presentation.graphe;</span>
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import fr.orsys.grapheur.graphe.Graphe;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PanneauFenetre extends JPanel {
+
+	/**
+	 * UID genere le 22/06/2010
+	 */
+	private static final long serialVersionUID = 5738050152988523053L;
+
+	private static final String TITRE = &quot;Echelle&quot;;
+
+	private JLabel labelXMin;
+	private JLabel labelXMax;
+	private JLabel labelGraduationX;
+
+	private JLabel labelYMin;
+	private JLabel labelYMax;
+	private JLabel labelGraduationY;
+
+	private JTextField champXMin;
+	private JTextField champXMax;
+	private JTextField champGraduationX;
+
+	private JTextField champYMin;
+	private JTextField champYMax;
+	private JTextField champGraduationY;
+
+	private Graphe graphe;
+
+	/**
+	 * @param graphe
+	 */
+<span class="nc" id="L52">	public PanneauFenetre(Graphe graphe) {</span>
+
+<span class="nc" id="L54">		this.graphe = graphe;</span>
+
+<span class="nc" id="L56">		Border bordureExterne = BorderFactory.createTitledBorder(TITRE);</span>
+<span class="nc" id="L57">		Border bordureInterne = BorderFactory.createEmptyBorder(5, 5, 5, 5);</span>
+
+<span class="nc" id="L59">		Border bordure = BorderFactory.createCompoundBorder(bordureExterne,</span>
+<span class="nc" id="L60">				bordureInterne);</span>
+
+<span class="nc" id="L62">		setBorder(bordure);</span>
+
+<span class="nc" id="L64">		setLayout(new GridBagLayout());</span>
+
+<span class="nc" id="L66">		creerComposants();</span>
+<span class="nc" id="L67">		ajouterComposants();</span>
+<span class="nc" id="L68">		ajouterEcouteurs();</span>
+
+<span class="nc" id="L70">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+<span class="nc" id="L77">		labelXMin = new JLabel(&quot;X.minimum&quot;);</span>
+<span class="nc" id="L78">		labelXMax = new JLabel(&quot;X.maximum&quot;);</span>
+<span class="nc" id="L79">		labelGraduationX = new JLabel(&quot;X.graduation&quot;);</span>
+
+<span class="nc" id="L81">		labelYMin = new JLabel(&quot;Y.minimum&quot;);</span>
+<span class="nc" id="L82">		labelYMax = new JLabel(&quot;Y.maximum&quot;);</span>
+<span class="nc" id="L83">		labelGraduationY = new JLabel(&quot;Y.graduation&quot;);</span>
+
+<span class="nc" id="L85">		champXMin = new JTextField(15);</span>
+<span class="nc" id="L86">		champXMax = new JTextField(15);</span>
+<span class="nc" id="L87">		champGraduationX = new JTextField(5);</span>
+
+<span class="nc" id="L89">		champYMin = new JTextField(15);</span>
+<span class="nc" id="L90">		champYMax = new JTextField(15);</span>
+<span class="nc" id="L91">		champGraduationY = new JTextField(5);</span>
+
+<span class="nc" id="L93">		actualiser();</span>
+
+<span class="nc" id="L95">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiser() {
+
+<span class="nc" id="L102">		double xMin = graphe.getXMin();</span>
+<span class="nc" id="L103">		double xMax = graphe.getXMax();</span>
+<span class="nc" id="L104">		double graduationX = graphe.getGraduationX();</span>
+
+<span class="nc" id="L106">		double yMin = graphe.getYMin();</span>
+<span class="nc" id="L107">		double yMax = graphe.getYMax();</span>
+<span class="nc" id="L108">		double graduationY = graphe.getGraduationY();</span>
+
+<span class="nc" id="L110">		champXMin.setText(Double.toString(xMin));</span>
+<span class="nc" id="L111">		champXMax.setText(Double.toString(xMax));</span>
+<span class="nc" id="L112">		champGraduationX.setText(Double.toString(graduationX));</span>
+
+<span class="nc" id="L114">		champYMin.setText(Double.toString(yMin));</span>
+<span class="nc" id="L115">		champYMax.setText(Double.toString(yMax));</span>
+<span class="nc" id="L116">		champGraduationY.setText(Double.toString(graduationY));</span>
+
+<span class="nc" id="L118">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterComposants() {
+
+<span class="nc" id="L125">		GridBagConstraints contraintes = new GridBagConstraints();</span>
+<span class="nc" id="L126">		contraintes.anchor = GridBagConstraints.LINE_START;</span>
+
+<span class="nc" id="L128">		contraintes.gridx = 0;</span>
+
+<span class="nc" id="L130">		contraintes.gridy = 0;</span>
+<span class="nc" id="L131">		add(labelXMin, contraintes);</span>
+
+<span class="nc" id="L133">		contraintes.gridy = 1;</span>
+<span class="nc" id="L134">		add(labelXMax, contraintes);</span>
+
+<span class="nc" id="L136">		contraintes.gridy = 2;</span>
+<span class="nc" id="L137">		add(labelGraduationX, contraintes);</span>
+
+<span class="nc" id="L139">		contraintes.gridy = 3;</span>
+<span class="nc" id="L140">		add(labelYMin, contraintes);</span>
+
+<span class="nc" id="L142">		contraintes.gridy = 4;</span>
+<span class="nc" id="L143">		add(labelYMax, contraintes);</span>
+
+<span class="nc" id="L145">		contraintes.gridy = 5;</span>
+<span class="nc" id="L146">		add(labelGraduationY, contraintes);</span>
+
+<span class="nc" id="L148">		contraintes.gridx = 1;</span>
+<span class="nc" id="L149">		contraintes.insets = new Insets(0, 20, 0, 0);</span>
+
+<span class="nc" id="L151">		contraintes.gridy = 0;</span>
+<span class="nc" id="L152">		add(champXMin, contraintes);</span>
+
+<span class="nc" id="L154">		contraintes.gridy = 1;</span>
+<span class="nc" id="L155">		add(champXMax, contraintes);</span>
+
+<span class="nc" id="L157">		contraintes.gridy = 2;</span>
+<span class="nc" id="L158">		add(champGraduationX, contraintes);</span>
+
+<span class="nc" id="L160">		contraintes.gridy = 3;</span>
+<span class="nc" id="L161">		add(champYMin, contraintes);</span>
+
+<span class="nc" id="L163">		contraintes.gridy = 4;</span>
+<span class="nc" id="L164">		add(champYMax, contraintes);</span>
+
+<span class="nc" id="L166">		contraintes.gridy = 5;</span>
+<span class="nc" id="L167">		add(champGraduationY, contraintes);</span>
+
+<span class="nc" id="L169">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterEcouteurs() {
+
+<span class="nc" id="L176">		champXMin.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L181">				double xMin = Double.parseDouble(champXMin.getText());</span>
+<span class="nc" id="L182">				graphe.setXMin(xMin);</span>
+<span class="nc" id="L183">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L185">			}</span>
+
+		});
+
+<span class="nc" id="L189">		champXMax.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L194">				double xMax = Double.parseDouble(champXMax.getText());</span>
+<span class="nc" id="L195">				graphe.setXMax(xMax);</span>
+<span class="nc" id="L196">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L198">			}</span>
+
+		});
+
+<span class="nc" id="L202">		champGraduationX.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L207">				double graduationX = Double.parseDouble(champGraduationX</span>
+<span class="nc" id="L208">						.getText());</span>
+<span class="nc" id="L209">				graphe.setGraduationX(graduationX);</span>
+<span class="nc" id="L210">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L212">			}</span>
+
+		});
+
+<span class="nc" id="L216">		champYMin.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L221">				double yMin = Double.parseDouble(champYMin.getText());</span>
+<span class="nc" id="L222">				graphe.setYMin(yMin);</span>
+<span class="nc" id="L223">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L225">			}</span>
+
+		});
+
+<span class="nc" id="L229">		champYMax.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L234">				double yMax = Double.parseDouble(champYMax.getText());</span>
+<span class="nc" id="L235">				graphe.setYMax(yMax);</span>
+<span class="nc" id="L236">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L238">			}</span>
+
+		});
+
+<span class="nc" id="L242">		champGraduationY.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L247">				double graduationY = Double.parseDouble(champGraduationY</span>
+<span class="nc" id="L248">						.getText());</span>
+<span class="nc" id="L249">				graphe.setGraduationY(graduationY);</span>
+<span class="nc" id="L250">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L252">			}</span>
+
+		});
+
+<span class="nc" id="L256">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IntrospectionUtilitaire.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.introspection</a> &gt; <span class="el_source">IntrospectionUtilitaire.java</span></div><h1>IntrospectionUtilitaire.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.introspection;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import fr.orsys.grapheur.utilitaire.StringUtilitaire;
+
+
+/**
+ * classe utilitaire pour l'introspection
+ * 
+ * @author GUEHENNEUX
+ */
+public class IntrospectionUtilitaire {
+
+	/**
+	 * signature d'une methode sans parametre
+	 */
+<span class="nc" id="L23">	public static final Class&lt;?&gt;[] SIGNATURE_VIDE = new Class[0];</span>
+
+	/**
+	 * parametres d'une methode sans parametre
+	 */
+<span class="nc" id="L28">	public static final Object[] PARAMETRES_VIDES = new Object[0];</span>
+
+	/**
+	 * format du message d'erreur lorsque l'appel a une methode a declenche une
+	 * exception
+	 */
+	private static final String MESSAGE_EXCEPTION = &quot;L''appel de la méthode {0} &quot;
+			+ &quot;sur le type {1} a déclenché une exception.&quot;;
+
+	/**
+	 * format du message d'erreur lors d'une violation de securite sur
+	 * l'obtention d'un getter
+	 */
+	private static final String MESSAGE_VIOLATION_SECURITE = &quot;L''obtention de la méthode {0} &quot;
+			+ &quot;sur un objet de type {1} est interdit, &quot;
+			+ &quot;vérifier que la méthode en question est publique.&quot;;
+
+	/**
+	 * format du message d'erreur lors de l'appel illegal a une methode
+	 */
+	private static final String MESSAGE_APPEL_INTERDIT = &quot;L''apel de la méthode {0} &quot;
+			+ &quot;sur un objet de type {1} est interdit, &quot;
+			+ &quot;vérifier que la méthode en question est publique.&quot;;
+
+	/**
+	 * format du message d'erreur lors de la tentative d'obtention d'une methode
+	 * inexistante pour un type donne
+	 */
+	private static final String MESSAGE_METHODE_INEXISTANTE = &quot;La méthode {0} &quot;
+			+ &quot;n''existe pas pour le type {1}.&quot;;
+
+	/**
+	 * format du message d'erreur si on appelle une methode avec de mauvais
+	 * arguments
+	 */
+	private static final String MESSAGE_MAUVAIS_ARGUMENTS = &quot;Le type des arguments founis ({0}) &quot;
+			+ &quot;ne correspond pas avec la signature de la méthode appelée ({1}) du type {2}.&quot;;
+
+	/**
+	 * format du message d'erreur si une erreur survient durant l'instanciation
+	 * d'une classe
+	 */
+	private static final String MESSAGE_ERREUR_INSTANCIATION = &quot;Une erreur est survenue &quot;
+			+ &quot;durant l''instanciation de la classe {0} (constructeur appelé : {1}, paramètres : {2}).&quot;;
+
+	/**
+	 * prefixe des getters (pour l'instant on ne se soucie pas des getters de
+	 * booleens)
+	 */
+	private static final String PREFIXE_GETTER = &quot;get&quot;;
+
+	/**
+	 * prefixe des setters
+	 */
+	private static final String PREFIXE_SETTER = &quot;set&quot;;
+
+	/**
+	 * table associant son wrapper a chaque type primitif
+	 */
+	private static Map&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt; tableWrappers;
+
+	static {
+
+<span class="nc" id="L91">		tableWrappers = new HashMap&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt;();</span>
+
+<span class="nc" id="L93">		tableWrappers.put(Double.class, Double.TYPE);</span>
+<span class="nc" id="L94">		tableWrappers.put(Long.class, Long.TYPE);</span>
+<span class="nc" id="L95">		tableWrappers.put(Integer.class, Integer.TYPE);</span>
+<span class="nc" id="L96">		tableWrappers.put(Short.class, Short.TYPE);</span>
+<span class="nc" id="L97">		tableWrappers.put(Float.class, Float.TYPE);</span>
+<span class="nc" id="L98">		tableWrappers.put(Byte.class, Byte.TYPE);</span>
+<span class="nc" id="L99">		tableWrappers.put(Boolean.class, Boolean.TYPE);</span>
+<span class="nc" id="L100">		tableWrappers.put(Character.class, Character.TYPE);</span>
+
+<span class="nc" id="L102">	}</span>
+
+	/**
+	 * constructeur prive pour empecher l'instanciation de cette classe
+	 * utilitaire
+	 */
+<span class="nc" id="L108">	private IntrospectionUtilitaire() {</span>
+
+<span class="nc" id="L110">	}</span>
+
+	/**
+	 * @param classe
+	 *            classe dont on souhaite creer une instance
+	 * @param typesParametres
+	 *            types des parametres du constructeur a appeler
+	 * @param valeursParametres
+	 *            valeurs des parametres du constructeur a appeler
+	 * @return une nouvelle instance de la classe donnee creee via le
+	 *         constructeur sans parametre
+	 * @throws P2PIntrospectionException
+	 *             exception durant la tentative d'instanciation
+	 */
+	public static Object creerInstance(Class&lt;?&gt; classe,
+			Class&lt;?&gt;[] typesParametres, Object[] valeursParametres)
+			throws ExceptionIntrospection {
+
+		Object instance;
+
+<span class="nc" id="L130">		String nomConstructeur = getNomClasseCourt(classe);</span>
+<span class="nc" id="L131">		String nomClasse = classe.getName();</span>
+<span class="nc" id="L132">		String detailConstructeur = getNomMethode(nomConstructeur,</span>
+<span class="nc" id="L133">				typesParametres);</span>
+<span class="nc" id="L134">		String detailParametres = getParametresEffectifs(valeursParametres);</span>
+
+<span class="nc" id="L136">		Object[] parametresMessage = { nomClasse, detailConstructeur,</span>
+<span class="nc" id="L137">				detailParametres };</span>
+
+<span class="nc" id="L139">		String message = MessageFormat.format(MESSAGE_ERREUR_INSTANCIATION,</span>
+<span class="nc" id="L140">				parametresMessage);</span>
+
+		try {
+
+<span class="nc" id="L144">			Constructor&lt;?&gt; constructeur = classe</span>
+<span class="nc" id="L145">					.getConstructor(typesParametres);</span>
+<span class="nc" id="L146">			instance = constructeur.newInstance(valeursParametres);</span>
+
+<span class="nc" id="L148">		} catch (SecurityException cause) {</span>
+
+<span class="nc" id="L150">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L151">					message, cause);</span>
+<span class="nc" id="L152">			throw exception;</span>
+
+<span class="nc" id="L154">		} catch (IllegalArgumentException cause) {</span>
+
+<span class="nc" id="L156">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L157">					message, cause);</span>
+<span class="nc" id="L158">			throw exception;</span>
+
+<span class="nc" id="L160">		} catch (NoSuchMethodException cause) {</span>
+
+<span class="nc" id="L162">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L163">					message, cause);</span>
+<span class="nc" id="L164">			throw exception;</span>
+
+<span class="nc" id="L166">		} catch (InstantiationException cause) {</span>
+
+<span class="nc" id="L168">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L169">					message, cause);</span>
+<span class="nc" id="L170">			throw exception;</span>
+
+<span class="nc" id="L172">		} catch (IllegalAccessException cause) {</span>
+
+<span class="nc" id="L174">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L175">					message, cause);</span>
+<span class="nc" id="L176">			throw exception;</span>
+
+<span class="nc" id="L178">		} catch (InvocationTargetException cause) {</span>
+
+<span class="nc" id="L180">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L181">					message, cause);</span>
+<span class="nc" id="L182">			throw exception;</span>
+
+		}
+
+		/*
+		 * FIN DE METHODE
+		 */
+
+<span class="nc" id="L190">		return instance;</span>
+
+	}
+
+	/**
+	 * recupere la valeur d'une propriete dans un bean par introspection
+	 * 
+	 * @param bean
+	 *            le bean dont on souhaite obtenir la valeur d'une propriete
+	 * @param propriete
+	 *            la propriete du bean dont on souhaite obtenir la valeur
+	 *            (exemple : nom, prenom, personne.nom, personne.pere.age, ...)
+	 * @return la valeur de la propriete donnee dans le bean donne
+	 * @throws ExceptionIntrospection
+	 *             exception lors de l'introspection
+	 */
+	public static Object getProprieteBean(Object bean, String propriete)
+			throws ExceptionIntrospection {
+
+		Object valeurPropriete;
+
+<span class="nc" id="L211">		int indexPoint = propriete.indexOf('.');</span>
+
+<span class="nc bnc" id="L213" title="All 2 branches missed.">		if (indexPoint != -1) {</span>
+
+			/*
+			 * si la propriete est du type champA.champB.champC...
+			 */
+
+			String nomChamp;
+			Object valeurChamp;
+
+<span class="nc" id="L222">			nomChamp = propriete.substring(0, indexPoint);</span>
+<span class="nc" id="L223">			valeurChamp = getChampBean(bean, nomChamp);</span>
+<span class="nc" id="L224">			String restePropriete = propriete.substring(indexPoint + 1);</span>
+<span class="nc" id="L225">			valeurPropriete = getProprieteBean(valeurChamp, restePropriete);</span>
+
+<span class="nc" id="L227">		} else {</span>
+
+			/*
+			 * si la propriete est du type champA
+			 */
+
+<span class="nc" id="L233">			valeurPropriete = getChampBean(bean, propriete);</span>
+
+		}
+
+<span class="nc" id="L237">		return valeurPropriete;</span>
+
+	}
+
+	/**
+	 * assigne la valeur d'une propriete dans un bean par introspection
+	 * 
+	 * @param bean
+	 *            le bean dans lequel on souhaite insérer la valeur d'une
+	 *            propriete
+	 * @param propriete
+	 *            la propriete du bean que l'on souhairte valorisé (exemple :
+	 *            nom, prenom, personne.nom, personne.pere.age, ...)
+	 * @param valeur
+	 *            valeur à insérer dans le champ du bean (pour les types
+	 *            primitifs, utiliser le wrapper)
+	 * @param primitif
+	 *            booléen indiquant si l'objet passé en paramètre est de type
+	 *            primitif
+	 * @throws ExceptionIntrospection
+	 *             exception lors de l'introspection
+	 */
+	public static void setProprieteBean(Object bean, String propriete,
+			String valeur, boolean primitif) throws ExceptionIntrospection {
+
+<span class="nc" id="L262">		int indexPoint = propriete.indexOf('.');</span>
+
+<span class="nc bnc" id="L264" title="All 2 branches missed.">		if (indexPoint != -1) {</span>
+
+			/*
+			 * si la propriete est du type champA.champB.champC...
+			 */
+
+			String nomChamp;
+			Object valeurChamp;
+
+<span class="nc" id="L273">			nomChamp = propriete.substring(0, indexPoint);</span>
+<span class="nc" id="L274">			valeurChamp = getChampBean(bean, nomChamp);</span>
+<span class="nc" id="L275">			String restePropriete = propriete.substring(indexPoint + 1);</span>
+<span class="nc" id="L276">			setProprieteBean(valeurChamp, restePropriete, valeur, primitif);</span>
+
+<span class="nc" id="L278">		} else {</span>
+
+			/*
+			 * si la propriete est du type champA
+			 */
+
+<span class="nc" id="L284">			setChampBean(bean, propriete, valeur, primitif);</span>
+
+		}
+<span class="nc" id="L287">	}</span>
+
+	/**
+	 * recupere la valeur d'un champ dans un bean par introspection
+	 * 
+	 * @param bean
+	 *            bean dont on souhaite obtenir la valeur d'un champ
+	 * @param nomChamp
+	 *            nom du champ du bean dont on souhaite obtenir la valeur
+	 * @return la valeur du champ donne dans le bean donne
+	 * @throws FacturecuSaExcp
+	 *             exception lors de l'introspection
+	 */
+	private static Object getChampBean(Object bean, String nomChamp)
+			throws ExceptionIntrospection {
+
+		Object valeurChamp;
+
+<span class="nc" id="L305">		String nomGetter = getNomGetter(nomChamp);</span>
+
+		/*
+		 * pas de parametres pour les getters
+		 */
+
+<span class="nc" id="L311">		valeurChamp = appelerMethode(bean, nomGetter, SIGNATURE_VIDE,</span>
+<span class="nc" id="L312">				PARAMETRES_VIDES);</span>
+
+<span class="nc" id="L314">		return valeurChamp;</span>
+
+	}
+
+	/**
+	 * assigne la valeur à un champ dans un bean par introspection
+	 * 
+	 * @param bean
+	 *            bean dans lequel on souhaite modifier la valeur d'un champ
+	 * @param nomChamp
+	 *            nom du champ du bean dont on souhaite modifier la valeur
+	 * @param valeur
+	 *            valeur à insérer dans le champ du bean (pour les types
+	 *            primitifs, utiliser le wrapper)
+	 * @param primitif
+	 *            booléen indiquant si l'objet passé en paramètre est de type
+	 *            primitif
+	 * @throws FacturecuSaExcp
+	 *             exception lors de l'introspection
+	 */
+	private static void setChampBean(Object bean, String nomChamp,
+			Object valeur, boolean primitif) throws ExceptionIntrospection {
+
+<span class="nc" id="L337">		String nomSetter = getNomSetter(nomChamp);</span>
+
+		/*
+		 * si le parametre a passer est un primitif on doit utiliser son wrapper
+		 * pour l'introspection
+		 */
+
+<span class="nc" id="L344">		Class&lt;?&gt; classe = valeur.getClass();</span>
+
+<span class="nc bnc" id="L346" title="All 2 branches missed.">		if (primitif) {</span>
+<span class="nc" id="L347">			classe = tableWrappers.get(classe);</span>
+		}
+
+<span class="nc" id="L350">		Class&lt;?&gt;[] typesParametresSetter = new Class[1];</span>
+<span class="nc" id="L351">		typesParametresSetter[0] = classe;</span>
+
+<span class="nc" id="L353">		Object[] parametresSetter = new Object[1];</span>
+<span class="nc" id="L354">		parametresSetter[0] = valeur;</span>
+
+<span class="nc" id="L356">		appelerMethode(bean, nomSetter, typesParametresSetter, parametresSetter);</span>
+
+<span class="nc" id="L358">	}</span>
+
+	/**
+	 * @param nomChamp
+	 *            nom du champ
+	 * @return le nom du getter correspondant (selon la norme JavaBean)
+	 */
+	private static String getNomGetter(String nomChamp) {
+
+<span class="nc" id="L367">		return PREFIXE_GETTER</span>
+<span class="nc" id="L368">				+ StringUtilitaire.premiereLettreMajuscule(nomChamp);</span>
+
+	}
+
+	/**
+	 * @param nomChamp
+	 *            nom du champ
+	 * @return le nom du setter correspondant (selon la norme JavaBean)
+	 */
+	private static String getNomSetter(String nomChamp) {
+
+<span class="nc" id="L379">		return PREFIXE_SETTER</span>
+<span class="nc" id="L380">				+ StringUtilitaire.premiereLettreMajuscule(nomChamp);</span>
+
+	}
+
+	/**
+	 * @param classe
+	 * @param propriete
+	 * @return
+	 * @throws ExceptionIntrospection
+	 */
+	public static Method getGetter(Class&lt;?&gt; classe, String propriete)
+			throws ExceptionIntrospection {
+
+<span class="nc" id="L393">		String nomGetter = getNomGetter(propriete);</span>
+<span class="nc" id="L394">		return getMethode(classe, nomGetter, SIGNATURE_VIDE);</span>
+
+	}
+
+	/**
+	 * @param classe
+	 * @param nomMethode
+	 * @return
+	 * @throws ExceptionIntrospection
+	 */
+	public static Method getMethode(Class&lt;?&gt; classe, String nomMethode,
+			Class&lt;?&gt;[] typesParametres) throws ExceptionIntrospection {
+
+		Method methode;
+
+		String nomMethodeComplet;
+		Object[] parametresMessage;
+		String message;
+
+		try {
+
+<span class="nc" id="L415">			methode = classe.getMethod(nomMethode, typesParametres);</span>
+
+<span class="nc" id="L417">		} catch (SecurityException cause) {</span>
+
+			/*
+			 * obtention methode interdite : methode privee en general
+			 */
+
+<span class="nc" id="L423">			nomMethodeComplet = getNomMethode(nomMethode, typesParametres);</span>
+<span class="nc" id="L424">			parametresMessage = new Object[] { nomMethodeComplet,</span>
+<span class="nc" id="L425">					classe.getName() };</span>
+<span class="nc" id="L426">			message = MessageFormat.format(MESSAGE_VIOLATION_SECURITE,</span>
+<span class="nc" id="L427">					parametresMessage);</span>
+<span class="nc" id="L428">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L429">					message, cause);</span>
+<span class="nc" id="L430">			throw exception;</span>
+
+<span class="nc" id="L432">		} catch (NoSuchMethodException cause) {</span>
+
+			/*
+			 * obtention methode impossible : methode inexistante
+			 */
+
+<span class="nc" id="L438">			nomMethodeComplet = getNomMethode(nomMethode, typesParametres);</span>
+<span class="nc" id="L439">			parametresMessage = new Object[] { nomMethodeComplet,</span>
+<span class="nc" id="L440">					classe.getName() };</span>
+<span class="nc" id="L441">			message = MessageFormat.format(MESSAGE_METHODE_INEXISTANTE,</span>
+<span class="nc" id="L442">					parametresMessage);</span>
+<span class="nc" id="L443">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L444">					message, cause);</span>
+<span class="nc" id="L445">			throw exception;</span>
+
+		}
+
+<span class="nc" id="L449">		return methode;</span>
+
+	}
+
+	/**
+	 * @param objet
+	 *            objet sur lequel appeler la methode (null pour appel d'une
+	 *            methode statique)
+	 * @param nomMethode
+	 *            nom de la methode
+	 * @param typesParametres
+	 *            tableau contenant le type des parametres, attention si le
+	 *            parametre effectif est de type primitif il faut utiliser
+	 *            l'attribut TYPE du wrapper correspondant
+	 * @param parametres
+	 *            tableau des parametres effectifs eventuellement encapsules
+	 *            dans leur wrapper respectif (int : Integer, double : Double,
+	 *            ...)
+	 * @return le resultat de la methode (null pour une methode de type void)
+	 * @throws FacturecuSaExcp
+	 *             exception lors de l'introspection
+	 */
+	public static Object appelerMethode(Object objet, String nomMethode,
+			Class&lt;?&gt;[] typesParametres, Object[] parametres)
+			throws ExceptionIntrospection {
+
+<span class="nc" id="L475">		Class&lt;?&gt; classeObjet = objet.getClass();</span>
+		Method methode;
+
+		/*
+		 * variables utilisees pour journaliser les erreurs d'introspection
+		 */
+
+		String message;
+		String nomMethodeComplet;
+		Object[] parametresMessage;
+
+		/*
+		 * on appelle la methode et on stocke le retour
+		 */
+
+		Object retour;
+
+<span class="nc" id="L492">		methode = getMethode(classeObjet, nomMethode, typesParametres);</span>
+
+		try {
+
+<span class="nc" id="L496">			retour = methode.invoke(objet, parametres);</span>
+
+<span class="nc" id="L498">		} catch (IllegalArgumentException cause) {</span>
+
+			/*
+			 * les arguments passes pour l'appel du getter ne correspondent pas
+			 * avec la signature du getter : ce cas ne devrait pas se produire
+			 */
+
+<span class="nc" id="L505">			String parametresEffectifs = getParametresEffectifs(parametres);</span>
+<span class="nc" id="L506">			nomMethodeComplet = getNomMethode(nomMethode, typesParametres);</span>
+
+<span class="nc" id="L508">			parametresMessage = new Object[] { parametresEffectifs,</span>
+<span class="nc" id="L509">					nomMethodeComplet, classeObjet.getName() };</span>
+
+<span class="nc" id="L511">			message = MessageFormat.format(MESSAGE_MAUVAIS_ARGUMENTS,</span>
+<span class="nc" id="L512">					parametresMessage);</span>
+<span class="nc" id="L513">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L514">					message, cause);</span>
+<span class="nc" id="L515">			throw exception;</span>
+
+<span class="nc" id="L517">		} catch (IllegalAccessException cause) {</span>
+
+			/*
+			 * appel methode interdit : methode privee en general
+			 */
+
+<span class="nc" id="L523">			nomMethodeComplet = getNomMethode(nomMethode, typesParametres);</span>
+<span class="nc" id="L524">			parametresMessage = new Object[] { nomMethodeComplet,</span>
+<span class="nc" id="L525">					classeObjet.getName() };</span>
+<span class="nc" id="L526">			message = MessageFormat.format(MESSAGE_APPEL_INTERDIT,</span>
+<span class="nc" id="L527">					parametresMessage);</span>
+<span class="nc" id="L528">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L529">					message, cause);</span>
+<span class="nc" id="L530">			throw exception;</span>
+
+<span class="nc" id="L532">		} catch (InvocationTargetException cause) {</span>
+
+			/*
+			 * exception levee par la methode appelee
+			 */
+
+<span class="nc" id="L538">			nomMethodeComplet = getNomMethode(nomMethode, typesParametres);</span>
+<span class="nc" id="L539">			parametresMessage = new Object[] { nomMethodeComplet,</span>
+<span class="nc" id="L540">					classeObjet.getName() };</span>
+<span class="nc" id="L541">			message = MessageFormat</span>
+<span class="nc" id="L542">					.format(MESSAGE_EXCEPTION, parametresMessage);</span>
+<span class="nc" id="L543">			ExceptionIntrospection exception = new ExceptionIntrospection(</span>
+<span class="nc" id="L544">					message, cause);</span>
+<span class="nc" id="L545">			throw exception;</span>
+
+		}
+
+<span class="nc" id="L549">		return retour;</span>
+
+	}
+
+	/**
+	 * @param parametres
+	 *            tableau d'objets
+	 * @return une chaine de caracteres representant le type des parametres
+	 */
+	private static String getParametresEffectifs(Object[] parametres) {
+
+		String parametresEffectifs;
+<span class="nc" id="L561">		StringBuffer buffer = new StringBuffer();</span>
+
+<span class="nc" id="L563">		buffer.append(&quot;(&quot;);</span>
+
+<span class="nc" id="L565">		int nombreParametres = parametres.length;</span>
+		Object parametre;
+		Class&lt;?&gt; typeParametre;
+		String typeParametreCourt;
+
+<span class="nc bnc" id="L570" title="All 2 branches missed.">		for (int indexParametre = 0; indexParametre &lt; nombreParametres; indexParametre++) {</span>
+
+<span class="nc" id="L572">			parametre = parametres[indexParametre];</span>
+<span class="nc" id="L573">			typeParametre = parametre.getClass();</span>
+<span class="nc" id="L574">			typeParametreCourt = getNomClasseCourt(typeParametre);</span>
+
+<span class="nc bnc" id="L576" title="All 2 branches missed.">			if (indexParametre &gt; 0) {</span>
+<span class="nc" id="L577">				buffer.append(&quot;, &quot;);</span>
+			}
+
+<span class="nc" id="L580">			buffer.append(typeParametreCourt);</span>
+
+		}
+
+<span class="nc" id="L584">		buffer.append(&quot;)&quot;);</span>
+
+<span class="nc" id="L586">		parametresEffectifs = buffer.toString();</span>
+<span class="nc" id="L587">		return parametresEffectifs;</span>
+
+	}
+
+	/**
+	 * @param nomMethode
+	 *            nom de la methode sans parentheses ni arguments
+	 * @param typesArguments
+	 *            types des arguments
+	 * @return le nom de la methode complet, dans un souci de clarte, le type
+	 *         des arguments n'inclus pas le package
+	 */
+	private static String getNomMethode(String nomMethode,
+			Class&lt;?&gt;[] typesArguments) {
+
+		String nomComplet;
+<span class="nc" id="L603">		StringBuffer buffer = new StringBuffer();</span>
+
+<span class="nc" id="L605">		buffer.append(nomMethode);</span>
+<span class="nc" id="L606">		buffer.append(&quot;(&quot;);</span>
+
+<span class="nc" id="L608">		int nombreArguments = typesArguments.length;</span>
+		Class&lt;?&gt; typeArgument;
+		String nomClasseSansPackage;
+
+		/*
+		 * on parcourt les types d'argument
+		 */
+
+<span class="nc bnc" id="L616" title="All 2 branches missed.">		for (int indexArgument = 0; indexArgument &lt; nombreArguments; indexArgument++) {</span>
+
+<span class="nc" id="L618">			typeArgument = typesArguments[indexArgument];</span>
+<span class="nc" id="L619">			nomClasseSansPackage = getNomClasseCourt(typeArgument);</span>
+
+<span class="nc bnc" id="L621" title="All 2 branches missed.">			if (indexArgument &gt; 0) {</span>
+<span class="nc" id="L622">				buffer.append(&quot;, &quot;);</span>
+			}
+
+<span class="nc" id="L625">			buffer.append(nomClasseSansPackage);</span>
+
+		}
+
+<span class="nc" id="L629">		buffer.append(&quot;)&quot;);</span>
+
+<span class="nc" id="L631">		nomComplet = buffer.toString();</span>
+<span class="nc" id="L632">		return nomComplet;</span>
+
+	}
+
+	/**
+	 * permet de recuperer le nom court d'une classe sans le package la chaine
+	 * obtenue n'identifie plus la classe de facon unique mais est plus lisible
+	 * dans le cadre de la journalisation par exemple
+	 * 
+	 * @param classe
+	 *            une classe quelconque
+	 * @return le nom court de la classe (sans le package)
+	 */
+	private static String getNomClasseCourt(Class&lt;?&gt; classe) {
+
+		String nomClasseSansPackage;
+
+<span class="nc" id="L649">		String nomClasseAvecPackage = classe.getName();</span>
+<span class="nc" id="L650">		int indexNomClasseSansPackage = nomClasseAvecPackage.lastIndexOf('.') + 1;</span>
+<span class="nc" id="L651">		nomClasseSansPackage = nomClasseAvecPackage</span>
+<span class="nc" id="L652">				.substring(indexNomClasseSansPackage);</span>
+
+<span class="nc" id="L654">		return nomClasseSansPackage;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

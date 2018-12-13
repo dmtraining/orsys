@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EcouteurChoixCouleur2.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.couleur.choix</a> &gt; <span class="el_source">EcouteurChoixCouleur2.java</span></div><h1>EcouteurChoixCouleur2.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.couleur.choix;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class EcouteurChoixCouleur2 implements MouseListener,
+		MouseMotionListener {
+
+	private ChoixCouleur choixCouleur;
+
+	private PanneauComposantes panneauComposantes;
+
+	/**
+	 * 
+	 * @param choixCouleur
+	 * @param panneauComposantes
+	 */
+<span class="nc" id="L24">	public EcouteurChoixCouleur2(ChoixCouleur choixCouleur,</span>
+			PanneauComposantes panneauComposantes) {
+
+<span class="nc" id="L27">		this.choixCouleur = choixCouleur;</span>
+<span class="nc" id="L28">		this.panneauComposantes = panneauComposantes;</span>
+
+<span class="nc" id="L30">	}</span>
+
+	/**
+	 * 
+	 * @param evenement
+	 */
+	private void actualiserChoixCouleur(MouseEvent evenement) {
+
+<span class="nc" id="L38">		int composante0 = evenement.getX();</span>
+<span class="nc" id="L39">		int composante1 = evenement.getY();</span>
+
+<span class="nc" id="L41">		choixCouleur.setComposantes01(composante0, composante1);</span>
+<span class="nc" id="L42">		panneauComposantes.setComposantes01(composante0, composante1);</span>
+
+<span class="nc" id="L44">	}</span>
+
+	@Override
+	public void mousePressed(MouseEvent evenement) {
+<span class="nc" id="L48">		actualiserChoixCouleur(evenement);</span>
+<span class="nc" id="L49">	}</span>
+
+	@Override
+	public void mouseDragged(MouseEvent evenement) {
+<span class="nc" id="L53">		actualiserChoixCouleur(evenement);</span>
+<span class="nc" id="L54">	}</span>
+
+	@Override
+	public void mouseClicked(MouseEvent evenement) {
+
+<span class="nc" id="L59">	}</span>
+
+	@Override
+	public void mouseEntered(MouseEvent evenement) {
+
+<span class="nc" id="L64">	}</span>
+
+	@Override
+	public void mouseExited(MouseEvent evenement) {
+
+<span class="nc" id="L69">	}</span>
+
+	@Override
+	public void mouseReleased(MouseEvent evenement) {
+
+<span class="nc" id="L74">	}</span>
+
+	@Override
+	public void mouseMoved(MouseEvent evenement) {
+
+<span class="nc" id="L79">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

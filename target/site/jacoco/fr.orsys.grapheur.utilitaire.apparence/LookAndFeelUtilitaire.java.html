@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>LookAndFeelUtilitaire.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.apparence</a> &gt; <span class="el_source">LookAndFeelUtilitaire.java</span></div><h1>LookAndFeelUtilitaire.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.apparence;
+
+import java.awt.Window;
+
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+<span class="nc" id="L15">public class LookAndFeelUtilitaire {</span>
+
+	/**
+	 * Tente d'appliquer un look and feel en le recherchant par son nom dans la
+	 * liste des look and feel installes. Actualise toutes les fenetres de
+	 * l'application.
+	 * 
+	 * Ne fait rien si le aucun des look and feel installes ne porte le nom
+	 * fourni.
+	 * 
+	 * 
+	 * @param nom
+	 *            nom du look and feel a appliquer
+	 * @throws UnsupportedLookAndFeelException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
+	 */
+	public static void setLookAndFeelParNom(String nom)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnsupportedLookAndFeelException {
+
+<span class="nc" id="L37">		LookAndFeelInfo[] informationsLnf = UIManager</span>
+<span class="nc" id="L38">				.getInstalledLookAndFeels();</span>
+
+		String nomLnf;
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		for (LookAndFeelInfo informationLnf : informationsLnf) {</span>
+
+<span class="nc" id="L44">			nomLnf = informationLnf.getName();</span>
+
+<span class="nc bnc" id="L46" title="All 2 branches missed.">			if (nomLnf.equals(nom)) {</span>
+
+<span class="nc" id="L48">				String classeLnf = informationLnf.getClassName();</span>
+<span class="nc" id="L49">				setLookAndFeelParClasse(classeLnf);</span>
+<span class="nc" id="L50">				break;</span>
+
+			}
+
+		}
+
+<span class="nc" id="L56">	}</span>
+
+	/**
+	 * Applique un look and feel et actualise les fenetres.
+	 * 
+	 * @param classe
+	 *            classe du look and feel a appliquer
+	 * @throws UnsupportedLookAndFeelException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
+	 */
+	public static void setLookAndFeelParClasse(String classe)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnsupportedLookAndFeelException {
+
+<span class="nc" id="L72">		UIManager.setLookAndFeel(classe);</span>
+
+<span class="nc" id="L74">		Window[] fenetres = Window.getWindows();</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		for (Window fenetre : fenetres) {</span>
+
+<span class="nc" id="L78">			SwingUtilities.updateComponentTreeUI(fenetre);</span>
+<span class="nc" id="L79">			fenetre.pack();</span>
+
+		}
+
+<span class="nc" id="L83">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

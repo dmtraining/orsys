@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BigFraction.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.mathematiques</a> &gt; <span class="el_source">BigFraction.java</span></div><h1>BigFraction.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.mathematiques;
+
+import java.math.BigInteger;
+import java.util.Random;
+
+import fr.orsys.grapheur.utilitaire.RegexUtilitaire;
+import fr.orsys.grapheur.utilitaire.StringUtilitaire;
+
+
+/**
+ * @author guehenneux
+ * 
+ */
+public class BigFraction extends Number implements Comparable&lt;BigFraction&gt; {
+
+	/**
+	 * UID genere le 04/06/2010
+	 */
+	private static final long serialVersionUID = -7515653377599378811L;
+
+	public static final String SEPARATEUR = &quot;/&quot;;
+
+	public BigInteger numerateur;
+	public BigInteger denominateur;
+
+<span class="nc" id="L26">	private static final String REGEX_SEPARATEUR = RegexUtilitaire</span>
+<span class="nc" id="L27">			.echapperMetacaracteres(SEPARATEUR);</span>
+
+<span class="nc" id="L29">	private static final Random RANDOM = new Random();</span>
+
+	/**
+	 * 
+	 * @param numerateurMaximum
+	 *            valeur maximum (exclue) pour le numerateur (doit etre
+	 *            superieur ou egal a 1)
+	 * @param denominateurMaximum
+	 *            valeur maximum (exclue) pour le denominateur (doit etre
+	 *            superieur ou egal a 2)
+	 * @param probabiliteFractionNegative
+	 * @return
+	 */
+	public static final BigFraction aleatoire(BigInteger numerateurMaximum,
+			BigInteger denominateurMaximum, float probabiliteFractionNegative) {
+
+<span class="nc" id="L45">		int nombreBitsNumerateur = numerateurMaximum.bitLength();</span>
+<span class="nc" id="L46">		BigInteger numerateur = new BigInteger(nombreBitsNumerateur, RANDOM);</span>
+<span class="nc" id="L47">		numerateur = numerateur.mod(numerateurMaximum);</span>
+
+<span class="nc" id="L49">		int nombreBitsDenominateur = denominateurMaximum.bitLength();</span>
+<span class="nc" id="L50">		BigInteger denominateur = new BigInteger(nombreBitsDenominateur, RANDOM);</span>
+<span class="nc" id="L51">		denominateur = denominateur.mod(</span>
+<span class="nc" id="L52">				denominateurMaximum.subtract(BigInteger.ONE)).add(</span>
+<span class="nc" id="L53">				BigInteger.ONE);</span>
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if (RANDOM.nextFloat() &lt; probabiliteFractionNegative) {</span>
+<span class="nc" id="L56">			numerateur = numerateur.negate();</span>
+		}
+
+<span class="nc" id="L59">		return new BigFraction(numerateur, denominateur);</span>
+
+	}
+
+	/**
+	 * simplifie la fraction
+	 * 
+	 * @param chaine
+	 *            une chaine representant une fraction sous la forme
+	 *            123456789/987654321 ou bien simplement 123456789
+	 */
+<span class="nc" id="L70">	public BigFraction(String chaine) {</span>
+
+<span class="nc" id="L72">		String[] elements = chaine.split(REGEX_SEPARATEUR);</span>
+
+<span class="nc" id="L74">		numerateur = new BigInteger(elements[0]);</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		if (elements.length == 1) {</span>
+<span class="nc" id="L77">			denominateur = BigInteger.ONE;</span>
+<span class="nc" id="L78">		} else {</span>
+<span class="nc" id="L79">			denominateur = new BigInteger(elements[1]);</span>
+		}
+
+<span class="nc" id="L82">		standardiser();</span>
+
+<span class="nc" id="L84">	}</span>
+
+	/**
+	 * 
+	 * @param numerateur
+	 */
+<span class="nc" id="L90">	public BigFraction(BigInteger numerateur) {</span>
+
+<span class="nc" id="L92">		this.numerateur = numerateur;</span>
+<span class="nc" id="L93">		denominateur = BigInteger.ONE;</span>
+
+<span class="nc" id="L95">	}</span>
+
+	/**
+	 * simplifie la fraction
+	 * 
+	 * @param numerateur
+	 * @param denominateur
+	 */
+<span class="nc" id="L103">	public BigFraction(BigInteger numerateur, BigInteger denominateur) {</span>
+
+<span class="nc" id="L105">		this.numerateur = numerateur;</span>
+<span class="nc" id="L106">		this.denominateur = denominateur;</span>
+
+<span class="nc" id="L108">		standardiser();</span>
+
+<span class="nc" id="L110">	}</span>
+
+	/**
+	 * cree une fraction nulle numerateur a 0 et denominateur arbitraire
+	 */
+	public BigFraction() {
+<span class="nc" id="L116">		this(BigInteger.ZERO, BigInteger.ONE);</span>
+<span class="nc" id="L117">	}</span>
+
+	/**
+	 * 
+	 * @return true si la fraction est nulle, false sinon
+	 */
+	public final boolean estNulle() {
+<span class="nc" id="L124">		return numerateur.equals(BigInteger.ZERO);</span>
+	}
+
+	/**
+	 * @param terme
+	 * @return this + terme
+	 */
+	public final BigFraction ajouter(BigInteger terme) {
+
+<span class="nc" id="L133">		return new BigFraction(numerateur.add(terme.multiply(denominateur)),</span>
+<span class="nc" id="L134">				denominateur);</span>
+
+	}
+
+	/**
+	 * this = this + terme
+	 * 
+	 * @param terme
+	 * @return this
+	 */
+	public final BigFraction ajouterThis(BigInteger terme) {
+
+<span class="nc" id="L146">		numerateur = numerateur.add(terme.multiply(denominateur));</span>
+
+<span class="nc" id="L148">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this + fraction
+	 */
+	public final BigFraction ajouter(BigFraction fraction) {
+
+<span class="nc" id="L158">		return new BigFraction(numerateur.multiply(fraction.denominateur).add(</span>
+<span class="nc" id="L159">				fraction.numerateur.multiply(denominateur)), denominateur</span>
+<span class="nc" id="L160">				.multiply(fraction.denominateur));</span>
+
+	}
+
+	/**
+	 * this = this + fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final BigFraction ajouterThis(BigFraction fraction) {
+
+<span class="nc" id="L172">		numerateur = numerateur.multiply(fraction.denominateur).add(</span>
+<span class="nc" id="L173">				fraction.numerateur.multiply(denominateur));</span>
+
+<span class="nc" id="L175">		denominateur = denominateur.multiply(fraction.denominateur);</span>
+
+<span class="nc" id="L177">		standardiser();</span>
+
+<span class="nc" id="L179">		return this;</span>
+
+	}
+
+	/**
+	 * @param terme
+	 * @return this * terme
+	 */
+	public final BigFraction multiplier(BigInteger terme) {
+<span class="nc" id="L188">		return new BigFraction(numerateur.multiply(terme), denominateur);</span>
+	}
+
+	/**
+	 * this = this * terme
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final BigFraction multiplierThis(BigInteger terme) {
+
+<span class="nc" id="L199">		numerateur = numerateur.multiply(terme);</span>
+
+<span class="nc" id="L201">		standardiser();</span>
+
+<span class="nc" id="L203">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this * fraction
+	 */
+	public final BigFraction multiplier(BigFraction fraction) {
+
+<span class="nc" id="L213">		return new BigFraction(numerateur.multiply(fraction.numerateur),</span>
+<span class="nc" id="L214">				denominateur.multiply(fraction.denominateur));</span>
+
+	}
+
+	/**
+	 * this = this * fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final BigFraction multiplierThis(BigFraction fraction) {
+
+<span class="nc" id="L226">		numerateur = numerateur.multiply(fraction.numerateur);</span>
+<span class="nc" id="L227">		denominateur = denominateur.multiply(fraction.denominateur);</span>
+
+<span class="nc" id="L229">		standardiser();</span>
+
+<span class="nc" id="L231">		return this;</span>
+
+	}
+
+	/**
+	 * 
+	 * @param terme
+	 * @return this - terme
+	 */
+	public final BigFraction soustraire(BigInteger terme) {
+
+<span class="nc" id="L242">		return new BigFraction(numerateur</span>
+<span class="nc" id="L243">				.subtract(terme.multiply(denominateur)), denominateur);</span>
+
+	}
+
+	/**
+	 * this = this - terme
+	 * 
+	 * @param terme
+	 * @return
+	 */
+	public final BigFraction soustraireThis(BigInteger terme) {
+
+<span class="nc" id="L255">		numerateur = numerateur.subtract(terme.multiply(denominateur));</span>
+
+<span class="nc" id="L257">		standardiser();</span>
+
+<span class="nc" id="L259">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this - fraction
+	 */
+	public final BigFraction soustraire(BigFraction fraction) {
+
+<span class="nc" id="L269">		return new BigFraction(numerateur.multiply(fraction.denominateur)</span>
+<span class="nc" id="L270">				.subtract(fraction.numerateur.multiply(denominateur)),</span>
+<span class="nc" id="L271">				denominateur.multiply(fraction.denominateur));</span>
+
+	}
+
+	/**
+	 * this = this - fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final BigFraction soustraireThis(BigFraction fraction) {
+
+<span class="nc" id="L283">		numerateur = numerateur.multiply(fraction.denominateur).subtract(</span>
+<span class="nc" id="L284">				fraction.numerateur.multiply(denominateur));</span>
+
+<span class="nc" id="L286">		denominateur = denominateur.multiply(fraction.denominateur);</span>
+
+<span class="nc" id="L288">		standardiser();</span>
+
+<span class="nc" id="L290">		return this;</span>
+
+	}
+
+	/**
+	 * @param terme
+	 * @return this / terme
+	 */
+	public final BigFraction diviser(BigInteger terme) {
+<span class="nc" id="L299">		return new BigFraction(numerateur, denominateur.multiply(terme));</span>
+	}
+
+	/**
+	 * this = this / terme
+	 * 
+	 * @param terme
+	 * @return this
+	 */
+	public final BigFraction diviserThis(BigInteger terme) {
+
+<span class="nc" id="L310">		denominateur = denominateur.multiply(terme);</span>
+
+<span class="nc" id="L312">		standardiser();</span>
+
+<span class="nc" id="L314">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this / fraction
+	 */
+	public final BigFraction diviser(BigFraction fraction) {
+
+<span class="nc" id="L324">		return new BigFraction(numerateur.multiply(fraction.denominateur),</span>
+<span class="nc" id="L325">				denominateur.multiply(fraction.numerateur));</span>
+
+	}
+
+	/**
+	 * this = this / fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final BigFraction diviserThis(BigFraction fraction) {
+
+<span class="nc" id="L337">		numerateur = numerateur.multiply(fraction.denominateur);</span>
+<span class="nc" id="L338">		denominateur = denominateur.multiply(fraction.numerateur);</span>
+
+<span class="nc" id="L340">		standardiser();</span>
+
+<span class="nc" id="L342">		return this;</span>
+
+	}
+
+	/**
+	 * @return 1 / this
+	 */
+	public final BigFraction inverser() {
+<span class="nc" id="L350">		return new BigFraction(denominateur, numerateur);</span>
+	}
+
+	/**
+	 * this = 1 / this
+	 * 
+	 * @return this
+	 */
+	public final BigFraction inverserThis() {
+
+<span class="nc" id="L360">		BigInteger numerateur = this.numerateur;</span>
+<span class="nc" id="L361">		this.numerateur = denominateur;</span>
+<span class="nc" id="L362">		denominateur = numerateur;</span>
+
+<span class="nc" id="L364">		homogeneiser();</span>
+
+<span class="nc" id="L366">		return this;</span>
+
+	}
+
+	/**
+	 * @return -this
+	 */
+	public final BigFraction opposer() {
+<span class="nc" id="L374">		return new BigFraction(numerateur.negate(), denominateur);</span>
+	}
+
+	/**
+	 * this = -this
+	 * 
+	 * @return this
+	 */
+	public final BigFraction opposerThis() {
+
+<span class="nc" id="L384">		numerateur = numerateur.negate();</span>
+
+<span class="nc" id="L386">		return this;</span>
+
+	}
+
+	/**
+	 * utilise un algorithme d'exponentiation rapide
+	 * 
+	 * @param exposant
+	 * @return this^exposant
+	 */
+	public final BigFraction puissance(int exposant) {
+
+<span class="nc" id="L398">		BigFraction puissance = new BigFraction(BigInteger.ONE, BigInteger.ONE);</span>
+<span class="nc" id="L399">		BigFraction fraction = clone();</span>
+
+<span class="nc bnc" id="L401" title="All 2 branches missed.">		boolean inversion = exposant &lt; 0;</span>
+
+<span class="nc bnc" id="L403" title="All 2 branches missed.">		if (inversion) {</span>
+<span class="nc" id="L404">			exposant = -exposant;</span>
+		}
+
+<span class="nc bnc" id="L407" title="All 2 branches missed.">		while (exposant &gt; 0) {</span>
+
+<span class="nc bnc" id="L409" title="All 2 branches missed.">			if (exposant % 2 == 1) {</span>
+<span class="nc" id="L410">				puissance.multiplierThis(fraction);</span>
+			}
+
+<span class="nc" id="L413">			fraction.multiplierThis(fraction);</span>
+<span class="nc" id="L414">			exposant &gt;&gt;= 1;</span>
+
+		}
+
+<span class="nc bnc" id="L418" title="All 2 branches missed.">		if (inversion) {</span>
+<span class="nc" id="L419">			puissance.inverserThis();</span>
+		}
+
+<span class="nc" id="L422">		return puissance;</span>
+
+	}
+
+	/**
+	 * reduit la fraction, puis s'assure que l'eventuel signe reste au
+	 * numerateur
+	 */
+	private final void standardiser() {
+
+<span class="nc" id="L432">		reduire();</span>
+<span class="nc" id="L433">		homogeneiser();</span>
+
+<span class="nc" id="L435">	}</span>
+
+	/**
+	 * suite a la reduction ou l'inversion d'une fraction, le signe negatif peut
+	 * passer au denominateur, on le place ainsi au numerateur
+	 */
+	private final void homogeneiser() {
+
+<span class="nc bnc" id="L443" title="All 2 branches missed.">		if (denominateur.compareTo(BigInteger.ZERO) &lt; 0) {</span>
+
+<span class="nc" id="L445">			numerateur = numerateur.negate();</span>
+<span class="nc" id="L446">			denominateur = denominateur.negate();</span>
+
+		}
+
+<span class="nc" id="L450">	}</span>
+
+	/**
+	 * reduit la fraction grace a l'algorithme d'Euclide
+	 */
+	private final void reduire() {
+
+<span class="nc" id="L457">		BigInteger pgcd = numerateur.gcd(denominateur);</span>
+
+<span class="nc bnc" id="L459" title="All 2 branches missed.">		if (pgcd.equals(BigInteger.ZERO)) {</span>
+<span class="nc" id="L460">			pgcd = BigInteger.ONE;</span>
+		}
+
+<span class="nc" id="L463">		numerateur = numerateur.divide(pgcd);</span>
+<span class="nc" id="L464">		denominateur = denominateur.divide(pgcd);</span>
+
+<span class="nc" id="L466">	}</span>
+
+	@Override
+	public final boolean equals(Object objet) {
+
+		boolean egalite;
+
+<span class="nc bnc" id="L473" title="All 2 branches missed.">		if (objet == null) {</span>
+
+<span class="nc" id="L475">			egalite = false;</span>
+
+<span class="nc bnc" id="L477" title="All 2 branches missed.">		} else if (objet == this) {</span>
+
+<span class="nc" id="L479">			egalite = true;</span>
+
+<span class="nc bnc" id="L481" title="All 2 branches missed.">		} else if (objet instanceof BigFraction) {</span>
+
+<span class="nc" id="L483">			BigFraction fraction = (BigFraction) objet;</span>
+
+<span class="nc bnc" id="L485" title="All 2 branches missed.">			egalite = estNulle() ? fraction.estNulle() : numerateur</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">					.equals(fraction.numerateur)</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">					&amp;&amp; denominateur.equals(fraction.denominateur);</span>
+
+<span class="nc" id="L489">		} else {</span>
+
+<span class="nc" id="L491">			egalite = false;</span>
+
+		}
+
+<span class="nc" id="L495">		return egalite;</span>
+
+	}
+
+	@Override
+	public final BigFraction clone() {
+<span class="nc" id="L501">		return new BigFraction(numerateur, denominateur);</span>
+	}
+
+	@Override
+	public final int hashCode() {
+
+<span class="nc" id="L507">		int hashCodeNumerateur = numerateur.hashCode();</span>
+<span class="nc" id="L508">		int hashCodeDenominateur = denominateur.hashCode();</span>
+
+<span class="nc" id="L510">		return hashCodeNumerateur ^ hashCodeDenominateur;</span>
+
+	}
+
+	@Override
+	public final double doubleValue() {
+<span class="nc" id="L516">		return numerateur.doubleValue() / denominateur.doubleValue();</span>
+	}
+
+	@Override
+	public final float floatValue() {
+<span class="nc" id="L521">		return numerateur.floatValue() / denominateur.floatValue();</span>
+	}
+
+	@Override
+	public final int intValue() {
+<span class="nc" id="L526">		return numerateur.divide(denominateur).intValue();</span>
+	}
+
+	@Override
+	public final long longValue() {
+<span class="nc" id="L531">		return numerateur.divide(denominateur).longValue();</span>
+	}
+
+	@Override
+	public final int compareTo(BigFraction fraction) {
+
+<span class="nc" id="L537">		BigInteger produit0 = numerateur.multiply(fraction.denominateur);</span>
+<span class="nc" id="L538">		BigInteger produit1 = denominateur.multiply(fraction.numerateur);</span>
+
+<span class="nc" id="L540">		return produit0.compareTo(produit1);</span>
+
+	}
+
+	@Override
+	public final String toString() {
+
+		String chaine;
+
+<span class="nc bnc" id="L549" title="All 2 branches missed.">		if (estNulle()) {</span>
+<span class="nc" id="L550">			chaine = &quot;0&quot;;</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">		} else if (denominateur.equals(BigInteger.ONE)) {</span>
+<span class="nc" id="L552">			chaine = numerateur.toString();</span>
+<span class="nc" id="L553">		} else {</span>
+<span class="nc" id="L554">			chaine = numerateur + SEPARATEUR + denominateur;</span>
+		}
+
+<span class="nc" id="L557">		return chaine;</span>
+	}
+
+	/**
+	 * 
+	 * @param format
+	 * @return
+	 */
+	public final String toString(int longueur) {
+
+<span class="nc" id="L567">		String fractionString = toString();</span>
+
+<span class="nc" id="L569">		return StringUtilitaire.formater(fractionString, longueur, true, true,</span>
+<span class="nc" id="L570">				' ');</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

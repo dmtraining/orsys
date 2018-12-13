@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RegexUtilitaire.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire</a> &gt; <span class="el_source">RegexUtilitaire.java</span></div><h1>RegexUtilitaire.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+<span class="nc" id="L11">public class RegexUtilitaire {</span>
+
+	public static final char OU = '|';
+
+	public static final char CARACTERE_ECHAPPEMENT = '\\';
+
+	/**
+	 * liste des metacaracteres utilises dans les expressions regulieres
+	 */
+<span class="nc" id="L20">	private static final char[] METACARACTERES = { '.', '*', '?', '+', OU, '(',</span>
+<span class="nc" id="L21">			')', '{', '}', '[', ']', CARACTERE_ECHAPPEMENT };</span>
+
+	private static final Pattern PATTERN_METACARACTERES;
+
+	static {
+
+<span class="nc" id="L27">		StringBuilder tampon = new StringBuilder();</span>
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		for (char metacaractere : METACARACTERES) {</span>
+
+<span class="nc bnc" id="L31" title="All 2 branches missed.">			if (tampon.length() &gt; 0) {</span>
+<span class="nc" id="L32">				tampon.append(OU);</span>
+			}
+
+<span class="nc" id="L35">			tampon.append(echapperMetacaractere(metacaractere));</span>
+		}
+
+<span class="nc" id="L38">		PATTERN_METACARACTERES = Pattern.compile(tampon.toString());</span>
+
+<span class="nc" id="L40">	}</span>
+
+	/**
+	 * 
+	 * @param metacaractere
+	 * @return
+	 */
+	public static final String echapperMetacaractere(char metacaractere) {
+<span class="nc" id="L48">		return Character.toString(CARACTERE_ECHAPPEMENT) + metacaractere;</span>
+	}
+
+	/**
+	 * 
+	 * @param chaine
+	 * @return
+	 */
+	public static String echapperMetacaracteres(String chaine) {
+
+<span class="nc" id="L58">		Matcher matcherMetacaracteres = PATTERN_METACARACTERES.matcher(chaine);</span>
+
+<span class="nc" id="L60">		StringBuffer tampon = new StringBuffer();</span>
+
+		char metacaractere;
+		String metacaractereEchappe;
+
+		String sousChaineIgnoree;
+<span class="nc" id="L66">		int indexDebutLecture = 0;</span>
+		int indexDebutGroupe;
+
+		/*
+		 * ici, je n'ai pas utilise la methode appendReplacement qui remplacait
+		 * les &quot;\\&quot; par des &quot;\&quot;, je ne sais pas pourquoi
+		 */
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		while (matcherMetacaracteres.find()) {</span>
+
+			/*
+			 * index du metacaractere
+			 */
+
+<span class="nc" id="L80">			indexDebutGroupe = matcherMetacaracteres.start();</span>
+
+			/*
+			 * sous-chaine sans metacaracteres
+			 */
+
+<span class="nc" id="L86">			sousChaineIgnoree = chaine.substring(indexDebutLecture,</span>
+<span class="nc" id="L87">					indexDebutGroupe);</span>
+
+			/*
+			 * on conserve telles quelles les sous-chaines sans metacaracteres
+			 */
+
+<span class="nc" id="L93">			tampon.append(sousChaineIgnoree);</span>
+
+			/*
+			 * on recupere le metacaractere
+			 */
+
+<span class="nc" id="L99">			metacaractere = matcherMetacaracteres.group().charAt(0);</span>
+
+			/*
+			 * on le prefixe avec le caractere d'echappement
+			 */
+
+<span class="nc" id="L105">			metacaractereEchappe = echapperMetacaractere(metacaractere);</span>
+
+			/*
+			 * on rajoute le metacaractere echappe
+			 */
+
+<span class="nc" id="L111">			tampon.append(metacaractereEchappe);</span>
+
+			/*
+			 * on positionne l'index de debut de lecture apres le metacaractere
+			 * rencontre, pour l'iteration suivante
+			 */
+
+<span class="nc" id="L118">			indexDebutLecture = matcherMetacaracteres.end();</span>
+
+		}
+
+		/*
+		 * on rajoute la derniere sous-chaine sans metacaracteres
+		 */
+
+<span class="nc" id="L126">		sousChaineIgnoree = chaine.substring(indexDebutLecture);</span>
+<span class="nc" id="L127">		tampon.append(sousChaineIgnoree);</span>
+
+<span class="nc" id="L129">		return tampon.toString();</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

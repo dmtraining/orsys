@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauGraphe.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.graphe</a> &gt; <span class="el_source">PanneauGraphe.java</span></div><h1>PanneauGraphe.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.presentation.graphe;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.util.List;
+
+import fr.orsys.grapheur.graphe.Graphe;
+import fr.orsys.grapheur.graphe.courbe.Courbe;
+import fr.orsys.grapheur.utilitaire.swing.PanneauTampon;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PanneauGraphe extends PanneauTampon {
+
+	/**
+	 * UID genere le 15/06/2010
+	 */
+	private static final long serialVersionUID = -5006186588671314234L;
+
+	private static final int LARGEUR_MINIMUM = 400;
+	private static final int LARGEUR_IDEALE = 400;
+
+	private static final int HAUTEUR_MINIMUM = 300;
+	private static final int HAUTEUR_IDEALE = 300;
+
+<span class="nc" id="L36">	private static final Dimension DIMENSION_MINIMUM = new Dimension(</span>
+<span class="nc" id="L37">			LARGEUR_MINIMUM, HAUTEUR_MINIMUM);</span>
+
+<span class="nc" id="L39">	private static final Dimension DIMENSION_IDEALE = new Dimension(</span>
+<span class="nc" id="L40">			LARGEUR_IDEALE, HAUTEUR_IDEALE);</span>
+
+	private PanneauCoordonnees panneauCoordonnees;
+
+	private Graphe graphe;
+
+	/**
+	 * 
+	 * @param graphe
+	 * @param panneauCoordonnees
+	 */
+	public PanneauGraphe(Graphe graphe, PanneauCoordonnees panneauCoordonnees) {
+
+<span class="nc" id="L53">		super(false);</span>
+
+<span class="nc" id="L55">		this.graphe = graphe;</span>
+<span class="nc" id="L56">		this.panneauCoordonnees = panneauCoordonnees;</span>
+
+<span class="nc" id="L58">		setBackground(Color.WHITE);</span>
+<span class="nc" id="L59">		setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));</span>
+
+<span class="nc" id="L61">		setPreferredSize(DIMENSION_IDEALE);</span>
+<span class="nc" id="L62">		setMinimumSize(DIMENSION_MINIMUM);</span>
+
+<span class="nc" id="L64">		new EcouteurGraphe(this);</span>
+
+<span class="nc" id="L66">	}</span>
+
+	@Override
+	public void dessiner() {
+
+		/*
+		 * dessin des axes
+		 */
+
+<span class="nc" id="L75">		Shape axeX = getAxeX();</span>
+<span class="nc" id="L76">		Shape axeY = getAxeY();</span>
+
+<span class="nc" id="L78">		graphique.setColor(Color.DARK_GRAY);</span>
+
+<span class="nc" id="L80">		graphique.draw(axeX);</span>
+<span class="nc" id="L81">		graphique.draw(axeY);</span>
+
+		/*
+		 * dessin des courbes
+		 */
+
+<span class="nc" id="L87">		AffineTransform transformationAffine = getTransformationAffine();</span>
+
+<span class="nc" id="L89">		List&lt;Courbe&gt; courbes = graphe.getCourbes();</span>
+		Shape formeCourbe;
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		for (Courbe courbe : courbes) {</span>
+
+<span class="nc" id="L94">			graphique.setColor(courbe.getCouleur());</span>
+<span class="nc" id="L95">			formeCourbe = courbe.getForme();</span>
+
+<span class="nc" id="L97">			formeCourbe = transformationAffine</span>
+<span class="nc" id="L98">					.createTransformedShape(formeCourbe);</span>
+
+<span class="nc" id="L100">			graphique.draw(formeCourbe);</span>
+
+		}
+
+<span class="nc" id="L104">	}</span>
+
+	/**
+	 * 
+	 * @return la transformation affine permettant d'adapter les coordonnees du
+	 *         graphe aux coordonnees de l'ecran
+	 */
+	private final AffineTransform getTransformationAffine() {
+
+		/*
+		 * on recupere la fenetre du graphe
+		 */
+
+<span class="nc" id="L117">		double xMin = graphe.getXMin();</span>
+<span class="nc" id="L118">		double xMax = graphe.getXMax();</span>
+<span class="nc" id="L119">		double yMin = graphe.getYMin();</span>
+<span class="nc" id="L120">		double yMax = graphe.getYMax();</span>
+
+		/*
+		 * transformation affine du graphe
+		 */
+
+<span class="nc" id="L126">		AffineTransform transformationAffine = AffineTransform</span>
+<span class="nc" id="L127">				.getScaleInstance(largeur / (xMax - xMin), hauteur</span>
+<span class="nc" id="L128">						/ (yMin - yMax));</span>
+
+<span class="nc" id="L130">		transformationAffine.translate(-xMin, -yMax);</span>
+
+<span class="nc" id="L132">		return transformationAffine;</span>
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private final Shape getAxeX() {
+
+		/*
+		 * parametres de l'axe
+		 */
+
+<span class="nc" id="L146">		double xMin = graphe.getXMin();</span>
+<span class="nc" id="L147">		double xMax = graphe.getXMax();</span>
+<span class="nc" id="L148">		double graduationX = graphe.getGraduationX();</span>
+
+		/*
+		 * forme de l'axe
+		 */
+
+<span class="nc" id="L154">		GeneralPath axeX = new GeneralPath();</span>
+
+		/*
+		 * transormation affine pour passer des coordonnees du graphe aux
+		 * coordonnees de l'ecran
+		 */
+
+<span class="nc" id="L161">		AffineTransform transformationAffine = getTransformationAffine();</span>
+
+		/*
+		 * ligne de l'axe
+		 */
+
+<span class="nc" id="L167">		Point2D minAxeGraphe = new Point2D.Double(xMin, 0);</span>
+<span class="nc" id="L168">		Point2D maxAxeGraphe = new Point2D.Double(xMax, 0);</span>
+
+<span class="nc" id="L170">		Point2D minAxeEcran = new Point2D.Double();</span>
+<span class="nc" id="L171">		Point2D maxAxeEcran = new Point2D.Double();</span>
+
+<span class="nc" id="L173">		transformationAffine.transform(minAxeGraphe, minAxeEcran);</span>
+<span class="nc" id="L174">		transformationAffine.transform(maxAxeGraphe, maxAxeEcran);</span>
+
+<span class="nc" id="L176">		axeX.append(new Line2D.Double(minAxeEcran, maxAxeEcran), false);</span>
+
+		/*
+		 * graduations de l'axe
+		 */
+
+		Point2D pointGraduationGraphe;
+		Point2D pointGraduationEcran;
+
+		Line2D graduation;
+
+		double x;
+
+		/*
+		 * graduations positives
+		 */
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">		for (x = graduationX; x &lt;= xMax; x += graduationX) {</span>
+
+<span class="nc" id="L195">			pointGraduationGraphe = new Point2D.Double(x, 0);</span>
+<span class="nc" id="L196">			pointGraduationEcran = new Point2D.Double();</span>
+
+<span class="nc" id="L198">			transformationAffine.transform(pointGraduationGraphe,</span>
+<span class="nc" id="L199">					pointGraduationEcran);</span>
+
+<span class="nc" id="L201">			graduation = new Line2D.Double(pointGraduationEcran.getX(),</span>
+<span class="nc" id="L202">					pointGraduationEcran.getY(), pointGraduationEcran.getX(),</span>
+<span class="nc" id="L203">					pointGraduationEcran.getY() - 3);</span>
+
+<span class="nc" id="L205">			axeX.append(graduation, false);</span>
+
+		}
+
+		/*
+		 * graduations negatives
+		 */
+
+<span class="nc bnc" id="L213" title="All 2 branches missed.">		for (x = -graduationX; x &gt;= xMin; x -= graduationX) {</span>
+
+<span class="nc" id="L215">			pointGraduationGraphe = new Point2D.Double(x, 0);</span>
+<span class="nc" id="L216">			pointGraduationEcran = new Point2D.Double();</span>
+
+<span class="nc" id="L218">			transformationAffine.transform(pointGraduationGraphe,</span>
+<span class="nc" id="L219">					pointGraduationEcran);</span>
+
+<span class="nc" id="L221">			graduation = new Line2D.Double(pointGraduationEcran.getX(),</span>
+<span class="nc" id="L222">					pointGraduationEcran.getY(), pointGraduationEcran.getX(),</span>
+<span class="nc" id="L223">					pointGraduationEcran.getY() - 3);</span>
+
+<span class="nc" id="L225">			axeX.append(graduation, false);</span>
+
+		}
+
+<span class="nc" id="L229">		return axeX;</span>
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private final Shape getAxeY() {
+
+		/*
+		 * parametres de l'axe
+		 */
+
+<span class="nc" id="L243">		double yMin = graphe.getYMin();</span>
+<span class="nc" id="L244">		double yMax = graphe.getYMax();</span>
+<span class="nc" id="L245">		double graduationY = graphe.getGraduationY();</span>
+
+		/*
+		 * forme de l'axe
+		 */
+
+<span class="nc" id="L251">		GeneralPath axeY = new GeneralPath();</span>
+
+		/*
+		 * transormation affine pour passer des coordonnees du graphe aux
+		 * coordonnees de l'ecran
+		 */
+
+<span class="nc" id="L258">		AffineTransform transformationAffine = getTransformationAffine();</span>
+
+		/*
+		 * ligne de l'axe
+		 */
+
+<span class="nc" id="L264">		Point2D minAxeGraphe = new Point2D.Double(0, yMin);</span>
+<span class="nc" id="L265">		Point2D maxAxeGraphe = new Point2D.Double(0, yMax);</span>
+
+<span class="nc" id="L267">		Point2D minAxeEcran = new Point2D.Double();</span>
+<span class="nc" id="L268">		Point2D maxAxeEcran = new Point2D.Double();</span>
+
+<span class="nc" id="L270">		transformationAffine.transform(minAxeGraphe, minAxeEcran);</span>
+<span class="nc" id="L271">		transformationAffine.transform(maxAxeGraphe, maxAxeEcran);</span>
+
+<span class="nc" id="L273">		axeY.append(new Line2D.Double(minAxeEcran, maxAxeEcran), false);</span>
+
+		/*
+		 * graduations de l'axe
+		 */
+
+		Point2D pointGraduationGraphe;
+		Point2D pointGraduationEcran;
+
+		Line2D graduation;
+
+		double y;
+
+		/*
+		 * graduations positives
+		 */
+
+<span class="nc bnc" id="L290" title="All 2 branches missed.">		for (y = graduationY; y &lt;= yMax; y += graduationY) {</span>
+
+<span class="nc" id="L292">			pointGraduationGraphe = new Point2D.Double(0, y);</span>
+<span class="nc" id="L293">			pointGraduationEcran = new Point2D.Double();</span>
+
+<span class="nc" id="L295">			transformationAffine.transform(pointGraduationGraphe,</span>
+<span class="nc" id="L296">					pointGraduationEcran);</span>
+
+<span class="nc" id="L298">			graduation = new Line2D.Double(pointGraduationEcran.getX(),</span>
+<span class="nc" id="L299">					pointGraduationEcran.getY(),</span>
+<span class="nc" id="L300">					pointGraduationEcran.getX() + 3, pointGraduationEcran</span>
+<span class="nc" id="L301">							.getY());</span>
+
+<span class="nc" id="L303">			axeY.append(graduation, false);</span>
+
+		}
+
+		/*
+		 * graduations negatives
+		 */
+
+<span class="nc bnc" id="L311" title="All 2 branches missed.">		for (y = -graduationY; y &gt;= yMin; y -= graduationY) {</span>
+
+<span class="nc" id="L313">			pointGraduationGraphe = new Point2D.Double(0, y);</span>
+<span class="nc" id="L314">			pointGraduationEcran = new Point2D.Double();</span>
+
+<span class="nc" id="L316">			transformationAffine.transform(pointGraduationGraphe,</span>
+<span class="nc" id="L317">					pointGraduationEcran);</span>
+
+<span class="nc" id="L319">			graduation = new Line2D.Double(pointGraduationEcran.getX(),</span>
+<span class="nc" id="L320">					pointGraduationEcran.getY(),</span>
+<span class="nc" id="L321">					pointGraduationEcran.getX() + 3, pointGraduationEcran</span>
+<span class="nc" id="L322">							.getY());</span>
+
+<span class="nc" id="L324">			axeY.append(graduation, false);</span>
+
+		}
+
+<span class="nc" id="L328">		return axeY;</span>
+
+	}
+
+	/**
+	 * 
+	 * @param x0
+	 * @param y0
+	 * @param x1
+	 * @param y1
+	 */
+	public final void grossir(int x0, int y0, int x1, int y1) {
+
+<span class="nc" id="L341">		AffineTransform transformationAffine = getTransformationAffine();</span>
+
+<span class="nc" id="L343">		Point2D coinCadre0 = new Point2D.Double(x0, y0);</span>
+<span class="nc" id="L344">		Point2D coinCadre1 = new Point2D.Double(x1, y1);</span>
+
+<span class="nc" id="L346">		Point2D coinGraphe0 = new Point2D.Double();</span>
+<span class="nc" id="L347">		Point2D coinGraphe1 = new Point2D.Double();</span>
+
+		try {
+
+<span class="nc" id="L351">			transformationAffine.inverseTransform(coinCadre0, coinGraphe0);</span>
+<span class="nc" id="L352">			transformationAffine.inverseTransform(coinCadre1, coinGraphe1);</span>
+
+<span class="nc" id="L354">			double xMin = Math.min(coinGraphe0.getX(), coinGraphe1.getX());</span>
+<span class="nc" id="L355">			double yMin = Math.min(coinGraphe0.getY(), coinGraphe1.getY());</span>
+<span class="nc" id="L356">			double xMax = Math.max(coinGraphe0.getX(), coinGraphe1.getX());</span>
+<span class="nc" id="L357">			double yMax = Math.max(coinGraphe0.getY(), coinGraphe1.getY());</span>
+
+<span class="nc" id="L359">			graphe.setXMin(xMin);</span>
+<span class="nc" id="L360">			graphe.setYMin(yMin);</span>
+
+<span class="nc" id="L362">			graphe.setXMax(xMax);</span>
+<span class="nc" id="L363">			graphe.setYMax(yMax);</span>
+			
+<span class="nc" id="L365">			graphe.actualiserFenetre();</span>
+
+<span class="nc" id="L367">		} catch (NoninvertibleTransformException erreur) {</span>
+
+		}
+
+<span class="nc" id="L371">		recalculerImage();</span>
+
+<span class="nc" id="L373">	}</span>
+
+	/**
+	 * 
+	 * @param xEcran
+	 * @param yEcran
+	 */
+	public final void actualiserCoordonneesCurseur(int xEcran, int yEcran) {
+
+<span class="nc" id="L382">		Point2D curseurEcran = new Point2D.Double(xEcran, yEcran);</span>
+<span class="nc" id="L383">		Point2D curseurGraphe = new Point2D.Double();</span>
+
+<span class="nc" id="L385">		AffineTransform transformationAffine = getTransformationAffine();</span>
+
+		try {
+
+<span class="nc" id="L389">			transformationAffine.inverseTransform(curseurEcran, curseurGraphe);</span>
+
+<span class="nc" id="L391">			panneauCoordonnees.setX(curseurGraphe.getX());</span>
+<span class="nc" id="L392">			panneauCoordonnees.setY(curseurGraphe.getY());</span>
+
+<span class="nc" id="L394">		} catch (NoninvertibleTransformException erreur) {</span>
+
+		}
+
+<span class="nc" id="L398">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

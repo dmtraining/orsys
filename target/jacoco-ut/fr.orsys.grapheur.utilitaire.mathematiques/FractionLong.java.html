@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FractionLong.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.mathematiques</a> &gt; <span class="el_source">FractionLong.java</span></div><h1>FractionLong.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.mathematiques;
+
+import java.util.Random;
+
+import fr.orsys.grapheur.utilitaire.RegexUtilitaire;
+import fr.orsys.grapheur.utilitaire.StringUtilitaire;
+
+
+/**
+ * @author guehenneux
+ * 
+ */
+public class FractionLong extends Number implements Comparable&lt;FractionLong&gt; {
+
+	/**
+	 * UID genere le 03/06/2010
+	 */
+	private static final long serialVersionUID = 224373819279468374L;
+
+	public static final String SEPARATEUR = &quot;/&quot;;
+
+	public long numerateur;
+	public long denominateur;
+
+<span class="nc" id="L25">	private static final String REGEX_SEPARATEUR = RegexUtilitaire</span>
+<span class="nc" id="L26">			.echapperMetacaracteres(SEPARATEUR);</span>
+
+<span class="nc" id="L28">	private static final Random RANDOM = new Random();</span>
+
+	/**
+	 * 
+	 * @param numerateurMaximum
+	 *            valeur maximum (exclue) pour le numerateur (doit etre
+	 *            superieur ou egal a 1)
+	 * @param denominateurMaximum
+	 *            valeur maximum (exclue) pour le denominateur (doit etre
+	 *            superieur ou egal a 2)
+	 * @param probabiliteFractionNegative
+	 * @return
+	 */
+	public static final FractionLong aleatoire(long numerateurMaximum,
+			long denominateurMaximum, float probabiliteFractionNegative) {
+
+<span class="nc" id="L44">		long numerateur = Math.abs(RANDOM.nextLong() % numerateurMaximum);</span>
+
+<span class="nc" id="L46">		long denominateur = 1 + Math.abs(RANDOM.nextLong()</span>
+<span class="nc" id="L47">				% (denominateurMaximum - 1));</span>
+
+<span class="nc bnc" id="L49" title="All 2 branches missed.">		if (RANDOM.nextFloat() &lt; probabiliteFractionNegative) {</span>
+<span class="nc" id="L50">			numerateur = -numerateur;</span>
+		}
+
+<span class="nc" id="L53">		return new FractionLong(numerateur, denominateur);</span>
+
+	}
+
+	/**
+	 * simplifie la fraction
+	 * 
+	 * @param chaine
+	 *            une chaine representant une fraction sous la forme
+	 *            123456789/987654321 ou bien simplement 123456789
+	 */
+<span class="nc" id="L64">	public FractionLong(String chaine) {</span>
+
+<span class="nc" id="L66">		String[] elements = chaine.split(REGEX_SEPARATEUR);</span>
+
+<span class="nc" id="L68">		numerateur = Long.parseLong(elements[0]);</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		if (elements.length == 1) {</span>
+<span class="nc" id="L71">			denominateur = 1;</span>
+<span class="nc" id="L72">		} else {</span>
+<span class="nc" id="L73">			denominateur = Long.parseLong(elements[1]);</span>
+		}
+
+<span class="nc" id="L76">		standardiser();</span>
+
+<span class="nc" id="L78">	}</span>
+
+	/**
+	 * 
+	 * @param numerateur
+	 */
+<span class="nc" id="L84">	public FractionLong(long numerateur) {</span>
+
+<span class="nc" id="L86">		this.numerateur = numerateur;</span>
+<span class="nc" id="L87">		denominateur = 1;</span>
+
+<span class="nc" id="L89">	}</span>
+
+	/**
+	 * simplifie la fraction
+	 * 
+	 * @param numerateur
+	 * @param denominateur
+	 */
+<span class="nc" id="L97">	public FractionLong(long numerateur, long denominateur) {</span>
+
+<span class="nc" id="L99">		this.numerateur = numerateur;</span>
+<span class="nc" id="L100">		this.denominateur = denominateur;</span>
+
+<span class="nc" id="L102">		standardiser();</span>
+
+<span class="nc" id="L104">	}</span>
+
+	/**
+	 * cree une fraction nulle numerateur a 0 et denominateur arbitraire
+	 */
+	public FractionLong() {
+<span class="nc" id="L110">		this(0, 1);</span>
+<span class="nc" id="L111">	}</span>
+
+	/**
+	 * 
+	 * @return true si la fraction est nulle, false sinon
+	 */
+	public final boolean estNulle() {
+<span class="nc bnc" id="L118" title="All 2 branches missed.">		return numerateur == 0;</span>
+	}
+
+	/**
+	 * @param terme
+	 * @return this + terme
+	 */
+	public final FractionLong ajouter(long terme) {
+<span class="nc" id="L126">		return new FractionLong(numerateur + terme * denominateur, denominateur);</span>
+	}
+
+	/**
+	 * this = this + terme
+	 * 
+	 * @param terme
+	 * @return this
+	 */
+	public final FractionLong ajouterThis(long terme) {
+
+<span class="nc" id="L137">		numerateur += terme * denominateur;</span>
+
+<span class="nc" id="L139">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this + fraction
+	 */
+	public final FractionLong ajouter(FractionLong fraction) {
+
+<span class="nc" id="L149">		return new FractionLong(numerateur * fraction.denominateur</span>
+<span class="nc" id="L150">				+ fraction.numerateur * denominateur, denominateur</span>
+<span class="nc" id="L151">				* fraction.denominateur);</span>
+
+	}
+
+	/**
+	 * this = this + fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final FractionLong ajouterThis(FractionLong fraction) {
+
+<span class="nc" id="L163">		numerateur = numerateur * fraction.denominateur + fraction.numerateur</span>
+<span class="nc" id="L164">				* denominateur;</span>
+
+<span class="nc" id="L166">		denominateur *= fraction.denominateur;</span>
+
+<span class="nc" id="L168">		standardiser();</span>
+
+<span class="nc" id="L170">		return this;</span>
+
+	}
+
+	/**
+	 * @param terme
+	 * @return this * terme
+	 */
+	public final FractionLong multiplier(long terme) {
+<span class="nc" id="L179">		return new FractionLong(numerateur * terme, denominateur);</span>
+	}
+
+	/**
+	 * this = this * terme
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final FractionLong multiplierThis(long terme) {
+
+<span class="nc" id="L190">		numerateur *= terme;</span>
+
+<span class="nc" id="L192">		standardiser();</span>
+
+<span class="nc" id="L194">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this * fraction
+	 */
+	public final FractionLong multiplier(FractionLong fraction) {
+
+<span class="nc" id="L204">		return new FractionLong(numerateur * fraction.numerateur, denominateur</span>
+<span class="nc" id="L205">				* fraction.denominateur);</span>
+
+	}
+
+	/**
+	 * this = this * fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final FractionLong multiplierThis(FractionLong fraction) {
+
+<span class="nc" id="L217">		numerateur *= fraction.numerateur;</span>
+<span class="nc" id="L218">		denominateur *= fraction.denominateur;</span>
+
+<span class="nc" id="L220">		standardiser();</span>
+
+<span class="nc" id="L222">		return this;</span>
+
+	}
+
+	/**
+	 * 
+	 * @param terme
+	 * @return this - terme
+	 */
+	public final FractionLong soustraire(long terme) {
+<span class="nc" id="L232">		return new FractionLong(numerateur - terme * denominateur, denominateur);</span>
+	}
+
+	/**
+	 * this = this - terme
+	 * 
+	 * @param terme
+	 * @return
+	 */
+	public final FractionLong soustraireThis(long terme) {
+
+<span class="nc" id="L243">		numerateur -= terme * denominateur;</span>
+
+<span class="nc" id="L245">		standardiser();</span>
+
+<span class="nc" id="L247">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this - fraction
+	 */
+	public final FractionLong soustraire(FractionLong fraction) {
+
+<span class="nc" id="L257">		return new FractionLong(numerateur * fraction.denominateur</span>
+<span class="nc" id="L258">				- fraction.numerateur * denominateur, denominateur</span>
+<span class="nc" id="L259">				* fraction.denominateur);</span>
+
+	}
+
+	/**
+	 * this = this - fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final FractionLong soustraireThis(FractionLong fraction) {
+
+<span class="nc" id="L271">		numerateur = numerateur * fraction.denominateur - fraction.numerateur</span>
+<span class="nc" id="L272">				* denominateur;</span>
+
+<span class="nc" id="L274">		denominateur *= fraction.denominateur;</span>
+
+<span class="nc" id="L276">		standardiser();</span>
+
+<span class="nc" id="L278">		return this;</span>
+
+	}
+
+	/**
+	 * @param terme
+	 * @return this / terme
+	 */
+	public final FractionLong diviser(long terme) {
+<span class="nc" id="L287">		return new FractionLong(numerateur, denominateur * terme);</span>
+	}
+
+	/**
+	 * this = this / terme
+	 * 
+	 * @param terme
+	 * @return this
+	 */
+	public final FractionLong diviserThis(long terme) {
+
+<span class="nc" id="L298">		denominateur *= terme;</span>
+
+<span class="nc" id="L300">		standardiser();</span>
+
+<span class="nc" id="L302">		return this;</span>
+
+	}
+
+	/**
+	 * @param fraction
+	 * @return this / fraction
+	 */
+	public final FractionLong diviser(FractionLong fraction) {
+
+<span class="nc" id="L312">		return new FractionLong(numerateur * fraction.denominateur,</span>
+<span class="nc" id="L313">				denominateur * fraction.numerateur);</span>
+
+	}
+
+	/**
+	 * this = this / fraction
+	 * 
+	 * @param fraction
+	 * @return this
+	 */
+	public final FractionLong diviserThis(FractionLong fraction) {
+
+<span class="nc" id="L325">		numerateur *= fraction.denominateur;</span>
+<span class="nc" id="L326">		denominateur *= fraction.numerateur;</span>
+
+<span class="nc" id="L328">		standardiser();</span>
+
+<span class="nc" id="L330">		return this;</span>
+
+	}
+
+	/**
+	 * @return 1 / this
+	 */
+	public final FractionLong inverser() {
+<span class="nc" id="L338">		return new FractionLong(denominateur, numerateur);</span>
+	}
+
+	/**
+	 * this = 1 / this
+	 * 
+	 * @return this
+	 */
+	public final FractionLong inverserThis() {
+
+<span class="nc" id="L348">		long numerateur = this.numerateur;</span>
+<span class="nc" id="L349">		this.numerateur = denominateur;</span>
+<span class="nc" id="L350">		denominateur = numerateur;</span>
+
+<span class="nc" id="L352">		homogeneiser();</span>
+
+<span class="nc" id="L354">		return this;</span>
+
+	}
+
+	/**
+	 * @return -this
+	 */
+	public final FractionLong opposer() {
+<span class="nc" id="L362">		return new FractionLong(-numerateur, denominateur);</span>
+	}
+
+	/**
+	 * this = -this
+	 * 
+	 * @return this
+	 */
+	public final FractionLong opposerThis() {
+
+<span class="nc" id="L372">		numerateur = -numerateur;</span>
+
+<span class="nc" id="L374">		return this;</span>
+
+	}
+
+	/**
+	 * utilise un algorithme d'exponentiation rapide
+	 * 
+	 * @param exposant
+	 * @return this^exposant
+	 */
+	public final FractionLong puissance(int exposant) {
+
+<span class="nc" id="L386">		FractionLong puissance = new FractionLong(1, 1);</span>
+<span class="nc" id="L387">		FractionLong fraction = clone();</span>
+
+<span class="nc bnc" id="L389" title="All 2 branches missed.">		boolean inversion = exposant &lt; 0;</span>
+
+<span class="nc bnc" id="L391" title="All 2 branches missed.">		if (inversion) {</span>
+<span class="nc" id="L392">			exposant = -exposant;</span>
+		}
+
+<span class="nc bnc" id="L395" title="All 2 branches missed.">		while (exposant &gt; 0) {</span>
+
+<span class="nc bnc" id="L397" title="All 2 branches missed.">			if (exposant % 2 == 1) {</span>
+<span class="nc" id="L398">				puissance.multiplierThis(fraction);</span>
+			}
+
+<span class="nc" id="L401">			fraction.multiplierThis(fraction);</span>
+<span class="nc" id="L402">			exposant &gt;&gt;= 1;</span>
+
+		}
+
+<span class="nc bnc" id="L406" title="All 2 branches missed.">		if (inversion) {</span>
+<span class="nc" id="L407">			puissance.inverserThis();</span>
+		}
+
+<span class="nc" id="L410">		return puissance;</span>
+
+	}
+
+	/**
+	 * reduit la fraction, puis s'assure que l'eventuel signe reste au
+	 * numerateur
+	 */
+	private final void standardiser() {
+
+<span class="nc" id="L420">		reduire();</span>
+<span class="nc" id="L421">		homogeneiser();</span>
+
+<span class="nc" id="L423">	}</span>
+
+	/**
+	 * suite a la reduction ou l'inversion d'une fraction, le signe negatif peut
+	 * passer au denominateur, on le place ainsi au numerateur
+	 */
+	private final void homogeneiser() {
+
+<span class="nc bnc" id="L431" title="All 2 branches missed.">		if (denominateur &lt; 0) {</span>
+
+<span class="nc" id="L433">			numerateur = -numerateur;</span>
+<span class="nc" id="L434">			denominateur = -denominateur;</span>
+
+		}
+
+<span class="nc" id="L438">	}</span>
+
+	/**
+	 * reduit la fraction grace a l'algorithme d'Euclide
+	 */
+	private final void reduire() {
+
+<span class="nc" id="L445">		long pgcd = MathematiquesUtilitaire.pgcd(numerateur, denominateur);</span>
+
+<span class="nc" id="L447">		numerateur /= pgcd;</span>
+<span class="nc" id="L448">		denominateur /= pgcd;</span>
+
+<span class="nc" id="L450">	}</span>
+
+	@Override
+	public final boolean equals(Object objet) {
+
+		boolean egalite;
+
+<span class="nc bnc" id="L457" title="All 2 branches missed.">		if (objet == null) {</span>
+
+<span class="nc" id="L459">			egalite = false;</span>
+
+<span class="nc bnc" id="L461" title="All 2 branches missed.">		} else if (objet == this) {</span>
+
+<span class="nc" id="L463">			egalite = true;</span>
+
+<span class="nc bnc" id="L465" title="All 2 branches missed.">		} else if (objet instanceof FractionLong) {</span>
+
+<span class="nc" id="L467">			FractionLong fraction = (FractionLong) objet;</span>
+
+<span class="nc bnc" id="L469" title="All 4 branches missed.">			egalite = (numerateur == 0) ? fraction.numerateur == 0</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">					: numerateur == fraction.numerateur</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">							&amp;&amp; denominateur == fraction.denominateur;</span>
+
+<span class="nc" id="L473">		} else {</span>
+
+<span class="nc" id="L475">			egalite = false;</span>
+
+		}
+
+<span class="nc" id="L479">		return egalite;</span>
+
+	}
+
+	@Override
+	public final FractionLong clone() {
+<span class="nc" id="L485">		return new FractionLong(numerateur, denominateur);</span>
+	}
+
+	@Override
+	public final int hashCode() {
+
+<span class="nc" id="L491">		int numerateur0 = (int) numerateur;</span>
+<span class="nc" id="L492">		int numerateur1 = (int) (numerateur &gt;&gt;&gt; 32);</span>
+
+<span class="nc" id="L494">		int denominateur0 = (int) denominateur;</span>
+<span class="nc" id="L495">		int denominateur1 = (int) (denominateur &gt;&gt;&gt; 32);</span>
+
+<span class="nc" id="L497">		return numerateur0 ^ numerateur1 ^ denominateur0 ^ denominateur1;</span>
+
+	}
+
+	@Override
+	public final double doubleValue() {
+<span class="nc" id="L503">		return (double) numerateur / denominateur;</span>
+	}
+
+	@Override
+	public final float floatValue() {
+<span class="nc" id="L508">		return (float) numerateur / denominateur;</span>
+	}
+
+	@Override
+	public final int intValue() {
+<span class="nc" id="L513">		return (int) (numerateur / denominateur);</span>
+	}
+
+	@Override
+	public final long longValue() {
+<span class="nc" id="L518">		return numerateur / denominateur;</span>
+	}
+
+	@Override
+	public final int compareTo(FractionLong fraction) {
+
+		int comparaison;
+
+<span class="nc" id="L526">		long produit0 = numerateur * fraction.denominateur;</span>
+<span class="nc" id="L527">		long produit1 = denominateur * fraction.numerateur;</span>
+
+<span class="nc bnc" id="L529" title="All 2 branches missed.">		if (produit0 &gt; produit1) {</span>
+<span class="nc" id="L530">			comparaison = 1;</span>
+<span class="nc bnc" id="L531" title="All 2 branches missed.">		} else if (produit0 &lt; produit1) {</span>
+<span class="nc" id="L532">			comparaison = -1;</span>
+<span class="nc" id="L533">		} else {</span>
+<span class="nc" id="L534">			comparaison = 0;</span>
+		}
+
+<span class="nc" id="L537">		return comparaison;</span>
+
+	}
+
+	@Override
+	public final String toString() {
+
+		String chaine;
+
+<span class="nc bnc" id="L546" title="All 2 branches missed.">		if (numerateur == 0) {</span>
+<span class="nc" id="L547">			chaine = &quot;0&quot;;</span>
+<span class="nc bnc" id="L548" title="All 2 branches missed.">		} else if (denominateur == 1) {</span>
+<span class="nc" id="L549">			chaine = Long.toString(numerateur);</span>
+<span class="nc" id="L550">		} else {</span>
+<span class="nc" id="L551">			chaine = numerateur + SEPARATEUR + denominateur;</span>
+		}
+
+<span class="nc" id="L554">		return chaine;</span>
+	}
+
+	/**
+	 * 
+	 * @param format
+	 * @return
+	 */
+	public final String toString(int longueur) {
+
+<span class="nc" id="L564">		String fractionString = toString();</span>
+
+<span class="nc" id="L566">		return StringUtilitaire.formater(fractionString, longueur, true, true,</span>
+<span class="nc" id="L567">				' ');</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

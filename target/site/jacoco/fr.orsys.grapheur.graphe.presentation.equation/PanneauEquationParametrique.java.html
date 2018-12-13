@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauEquationParametrique.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.equation</a> &gt; <span class="el_source">PanneauEquationParametrique.java</span></div><h1>PanneauEquationParametrique.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package fr.orsys.grapheur.graphe.presentation.equation;</span>
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import fr.orsys.grapheur.graphe.equation.EquationParametrique;
+import fr.orsys.grapheur.graphe.fonction.Fonction;
+import fr.orsys.grapheur.graphe.fonction.fabrique.FabriqueFonction;
+import fr.orsys.grapheur.graphe.grammaire.ErreurSyntaxe;
+import fr.orsys.grapheur.utilitaire.GestionnaireException;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PanneauEquationParametrique extends PanneauEquation {
+
+	/**
+	 * UID genere le 24/06/2010
+	 */
+	private static final long serialVersionUID = 4114829001282179153L;
+
+	private JLabel labelF;
+	private JTextField champF;
+
+	private JLabel labelG;
+	private JTextField champG;
+
+	private EquationParametrique equationParametrique;
+
+	/**
+	 * 
+	 * @param equationParametrique
+	 */
+<span class="nc" id="L42">	public PanneauEquationParametrique(EquationParametrique equationParametrique) {</span>
+
+<span class="nc" id="L44">		this.equationParametrique = equationParametrique;</span>
+
+<span class="nc" id="L46">		setLayout(new GridBagLayout());</span>
+
+<span class="nc" id="L48">		creerComposants();</span>
+<span class="nc" id="L49">		ajouterComposants();</span>
+<span class="nc" id="L50">		ajouterEcouteurs();</span>
+
+<span class="nc" id="L52">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+<span class="nc" id="L59">		labelF = new JLabel(&quot;x = f(t) = &quot;);</span>
+<span class="nc" id="L60">		labelG = new JLabel(&quot;y = g(t) = &quot;);</span>
+
+<span class="nc" id="L62">		Fonction f = equationParametrique.getF();</span>
+<span class="nc" id="L63">		Fonction g = equationParametrique.getG();</span>
+
+<span class="nc" id="L65">		champF = new JTextField(50);</span>
+<span class="nc" id="L66">		champF.setText(f.getTexte());</span>
+
+<span class="nc" id="L68">		champG = new JTextField(50);</span>
+<span class="nc" id="L69">		champG.setText(g.getTexte());</span>
+
+<span class="nc" id="L71">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterComposants() {
+
+<span class="nc" id="L78">		GridBagConstraints contraintes = new GridBagConstraints();</span>
+<span class="nc" id="L79">		contraintes.insets = new Insets(2, 2, 2, 2);</span>
+		
+<span class="nc" id="L81">		contraintes.gridx = 0;</span>
+<span class="nc" id="L82">		contraintes.gridy = 0;</span>
+<span class="nc" id="L83">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L84">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L85">		add(labelF, contraintes);</span>
+
+<span class="nc" id="L87">		contraintes.gridx = 1;</span>
+<span class="nc" id="L88">		contraintes.gridy = 0;</span>
+<span class="nc" id="L89">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L90">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L91">		add(champF, contraintes);</span>
+
+<span class="nc" id="L93">		contraintes.gridx = 0;</span>
+<span class="nc" id="L94">		contraintes.gridy = 1;</span>
+<span class="nc" id="L95">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L96">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L97">		add(labelG, contraintes);</span>
+
+<span class="nc" id="L99">		contraintes.gridx = 1;</span>
+<span class="nc" id="L100">		contraintes.gridy = 1;</span>
+<span class="nc" id="L101">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L102">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L103">		add(champG, contraintes);</span>
+
+<span class="nc" id="L105">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterEcouteurs() {
+
+<span class="nc" id="L112">		champF.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+				try {
+
+<span class="nc" id="L119">					String texteF = champF.getText();</span>
+
+<span class="nc" id="L121">					Fonction f = FabriqueFonction.getInstance().creerFonction(</span>
+<span class="nc" id="L122">							texteF);</span>
+
+<span class="nc" id="L124">					equationParametrique.setF(f);</span>
+<span class="nc" id="L125">					graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L127">				} catch (ErreurSyntaxe erreurSyntaxe) {</span>
+
+<span class="nc" id="L129">					GestionnaireException.traiter(erreurSyntaxe);</span>
+
+				}
+
+<span class="nc" id="L133">			}</span>
+
+		});
+
+<span class="nc" id="L137">		champG.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+				try {
+
+<span class="nc" id="L144">					String texteG = champG.getText();</span>
+
+<span class="nc" id="L146">					Fonction g = FabriqueFonction.getInstance().creerFonction(</span>
+<span class="nc" id="L147">							texteG);</span>
+
+<span class="nc" id="L149">					equationParametrique.setG(g);</span>
+<span class="nc" id="L150">					graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L152">				} catch (ErreurSyntaxe erreurSyntaxe) {</span>
+
+<span class="nc" id="L154">					GestionnaireException.traiter(erreurSyntaxe);</span>
+
+				}
+
+<span class="nc" id="L158">			}</span>
+
+		});
+
+<span class="nc" id="L162">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

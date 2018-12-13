@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MenuLookAndFeel.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.apparence</a> &gt; <span class="el_source">MenuLookAndFeel.java</span></div><h1>MenuLookAndFeel.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.apparence;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JMenu;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+import javax.swing.plaf.metal.OceanTheme;
+
+
+/**
+ * 
+ * @author GUEHENNEUX
+ * 
+ */
+public class MenuLookAndFeel extends JMenu {
+
+	/**
+	 * UID genere le 29/04/2010
+	 */
+	private static final long serialVersionUID = 6489764030337693826L;
+
+	private static final Map&lt;String, String&gt; CLASSES_LNF;
+
+	/**
+	 * nom du look and feel : Metal
+	 */
+	private static final String NOM_LNF_METAL = &quot;Metal&quot;;
+
+	/**
+	 * classe du look and feel : Metal
+	 */
+<span class="nc" id="L43">	private static final String CLASSE_LNF_METAL = MetalLookAndFeel.class</span>
+<span class="nc" id="L44">			.getName();</span>
+
+	/**
+	 * liste des themes existants pour le look and feel metal
+	 */
+	private static final List&lt;MetalTheme&gt; THEMES_METAL;
+
+	static {
+
+		/*
+		 * on recupere les look and feel installes
+		 */
+
+<span class="nc" id="L57">		CLASSES_LNF = new HashMap&lt;String, String&gt;();</span>
+
+<span class="nc" id="L59">		LookAndFeelInfo[] informationsLnf = UIManager</span>
+<span class="nc" id="L60">				.getInstalledLookAndFeels();</span>
+
+		String nomLnf;
+		String classeLnf;
+
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		for (LookAndFeelInfo informationLnf : informationsLnf) {</span>
+
+<span class="nc" id="L67">			nomLnf = informationLnf.getName();</span>
+<span class="nc" id="L68">			classeLnf = informationLnf.getClassName();</span>
+<span class="nc" id="L69">			CLASSES_LNF.put(nomLnf, classeLnf);</span>
+
+		}
+
+		/*
+		 * on liste les themes disponibles pour le look and feel metal
+		 */
+
+<span class="nc" id="L77">		THEMES_METAL = new ArrayList&lt;MetalTheme&gt;();</span>
+
+<span class="nc" id="L79">		THEMES_METAL.add(new DefaultMetalTheme());</span>
+<span class="nc" id="L80">		THEMES_METAL.add(new OceanTheme());</span>
+
+<span class="nc" id="L82">	}</span>
+
+	private ButtonGroup groupeLnf;
+
+	/**
+	 * 
+	 */
+	public MenuLookAndFeel() {
+
+<span class="nc" id="L91">		super(&quot;Apparence&quot;);</span>
+
+<span class="nc" id="L93">		creerComposants();</span>
+
+<span class="nc" id="L95">	}</span>
+
+	/**
+	 * 
+	 */
+	private void creerComposants() {
+
+<span class="nc" id="L102">		LookAndFeel lnfCourant = UIManager.getLookAndFeel();</span>
+<span class="nc" id="L103">		String nomLnfCourant = lnfCourant.getName();</span>
+<span class="nc" id="L104">		String nomThemeMetalCourant = MetalLookAndFeel.getCurrentTheme()</span>
+<span class="nc" id="L105">				.getName();</span>
+
+<span class="nc" id="L107">		boolean lnfCourantMetal = nomLnfCourant.equals(NOM_LNF_METAL);</span>
+
+<span class="nc" id="L109">		groupeLnf = new ButtonGroup();</span>
+
+<span class="nc" id="L111">		Set&lt;String&gt; nomsLnf = CLASSES_LNF.keySet();</span>
+
+		JRadioButtonMenuItem lnf;
+		String classeLnf;
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">		for (String nomLnf : nomsLnf) {</span>
+
+<span class="nc" id="L118">			classeLnf = CLASSES_LNF.get(nomLnf);</span>
+
+			/*
+			 * on ajoute les themes &quot;Metal&quot; dans un sous-menu
+			 */
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			if (nomLnf.equals(NOM_LNF_METAL)) {</span>
+
+<span class="nc" id="L126">				JMenu menuMetal = new JMenu(NOM_LNF_METAL);</span>
+
+				String nomThemeMetal;
+
+<span class="nc bnc" id="L130" title="All 2 branches missed.">				for (MetalTheme themeMetal : THEMES_METAL) {</span>
+
+<span class="nc" id="L132">					nomThemeMetal = themeMetal.getName();</span>
+
+<span class="nc" id="L134">					lnf = new BoutonLookAndFeel(NOM_LNF_METAL,</span>
+<span class="nc" id="L135">							CLASSE_LNF_METAL, themeMetal);</span>
+
+<span class="nc bnc" id="L137" title="All 2 branches missed.">					lnf.setSelected(lnfCourantMetal</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">							&amp;&amp; nomThemeMetal.equals(nomThemeMetalCourant));</span>
+
+<span class="nc" id="L140">					groupeLnf.add(lnf);</span>
+<span class="nc" id="L141">					menuMetal.add(lnf);</span>
+
+				}
+
+<span class="nc" id="L145">				add(menuMetal);</span>
+
+<span class="nc" id="L147">			} else {</span>
+
+<span class="nc" id="L149">				lnf = new BoutonLookAndFeel(nomLnf, classeLnf, null);</span>
+<span class="nc" id="L150">				lnf.setSelected(nomLnf.equals(nomLnfCourant));</span>
+
+<span class="nc" id="L152">				groupeLnf.add(lnf);</span>
+<span class="nc" id="L153">				add(lnf);</span>
+
+			}
+
+		}
+
+<span class="nc" id="L159">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

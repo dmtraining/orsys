@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GestionnaireException.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire</a> &gt; <span class="el_source">GestionnaireException.java</span></div><h1>GestionnaireException.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/**
+ * 
+ * @author GUEHENNEUX
+ * 
+ */
+<span class="nc" id="L11">public class GestionnaireException {</span>
+
+	/**
+	 * 
+	 * @param erreur
+	 */
+	public static void traiter(Throwable erreur) {
+
+<span class="nc" id="L19">		JFrame fenetreErreur = new JFrame();</span>
+
+<span class="nc" id="L21">		String typeErreur = erreur.getClass().getSimpleName();</span>
+<span class="nc" id="L22">		String messageErreur = erreur.getLocalizedMessage();</span>
+
+<span class="nc" id="L24">		StringBuilder message = new StringBuilder();</span>
+
+<span class="nc" id="L26">		message.append(typeErreur);</span>
+<span class="nc" id="L27">		message.append(&quot;\n\n&quot; + messageErreur);</span>
+
+<span class="nc" id="L29">		Throwable erreurInitiale = ErreurUtilitaire.getErreurInitiale(erreur);</span>
+
+<span class="nc bnc" id="L31" title="All 2 branches missed.">		if (erreurInitiale != erreur) {</span>
+
+<span class="nc" id="L33">			String typeErreurInitiale = erreurInitiale.getClass()</span>
+<span class="nc" id="L34">					.getSimpleName();</span>
+
+<span class="nc" id="L36">			String messageErreurInitiale = erreurInitiale.getLocalizedMessage();</span>
+
+<span class="nc" id="L38">			message.append(&quot;\nCause : &quot;);</span>
+<span class="nc" id="L39">			message.append(typeErreurInitiale);</span>
+<span class="nc" id="L40">			message.append('(' + messageErreurInitiale + ')');</span>
+
+		}
+
+<span class="nc" id="L44">		JOptionPane.showMessageDialog(fenetreErreur, message, &quot;Erreur&quot;,</span>
+<span class="nc" id="L45">				JOptionPane.ERROR_MESSAGE);</span>
+
+<span class="nc" id="L47">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

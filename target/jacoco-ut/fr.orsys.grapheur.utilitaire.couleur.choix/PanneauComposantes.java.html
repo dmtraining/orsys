@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauComposantes.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.couleur.choix</a> &gt; <span class="el_source">PanneauComposantes.java</span></div><h1>PanneauComposantes.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.couleur.choix;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.border.Border;
+
+import fr.orsys.grapheur.utilitaire.couleur.EspaceColorimetrique;
+import fr.orsys.grapheur.utilitaire.mathematiques.MathematiquesUtilitaire;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PanneauComposantes extends JPanel {
+
+	/**
+	 * UID genere le 21/06/2010
+	 */
+	private static final long serialVersionUID = 9145802906004340625L;
+
+	private static final String TITRE = &quot;Composantes&quot;;
+
+	private ChoixCouleur choixCouleur;
+
+	private JLabel labelComposante0;
+	private JSlider sliderComposante0;
+	private JSpinner spinnerComposante0;
+
+	private JLabel labelComposante1;
+	private JSlider sliderComposante1;
+	private JSpinner spinnerComposante1;
+
+	private JLabel labelComposante2;
+	private JSlider sliderComposante2;
+	private JSpinner spinnerComposante2;
+
+	/**
+	 * @param choixCouleur
+	 */
+<span class="nc" id="L49">	public PanneauComposantes(ChoixCouleur choixCouleur) {</span>
+
+<span class="nc" id="L51">		this.choixCouleur = choixCouleur;</span>
+
+<span class="nc" id="L53">		Border bordureInterne = BorderFactory.createEmptyBorder(5, 5, 5, 5);</span>
+<span class="nc" id="L54">		Border bordureExterne = BorderFactory.createTitledBorder(TITRE);</span>
+
+<span class="nc" id="L56">		Border bordure = BorderFactory.createCompoundBorder(bordureExterne,</span>
+<span class="nc" id="L57">				bordureInterne);</span>
+
+<span class="nc" id="L59">		setBorder(bordure);</span>
+
+<span class="nc" id="L61">		setLayout(new GridBagLayout());</span>
+
+<span class="nc" id="L63">		creerComposants();</span>
+<span class="nc" id="L64">		ajouterComposants();</span>
+<span class="nc" id="L65">		ajouterEcouteurs();</span>
+
+<span class="nc" id="L67">	}</span>
+
+	/**
+	 * 
+	 * @param espaceColorimetrique
+	 */
+	public final void actualiserEspaceColorimetrique(
+			EspaceColorimetrique espaceColorimetrique) {
+
+<span class="nc" id="L76">		String nomComposante0 = espaceColorimetrique.getNomComposante0();</span>
+<span class="nc" id="L77">		String nomComposante1 = espaceColorimetrique.getNomComposante1();</span>
+<span class="nc" id="L78">		String nomComposante2 = espaceColorimetrique.getNomComposante2();</span>
+
+<span class="nc" id="L80">		labelComposante0.setText(nomComposante0);</span>
+<span class="nc" id="L81">		labelComposante1.setText(nomComposante1);</span>
+<span class="nc" id="L82">		labelComposante2.setText(nomComposante2);</span>
+
+<span class="nc" id="L84">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+<span class="nc" id="L91">		EspaceColorimetrique espaceColorimetrique = choixCouleur</span>
+<span class="nc" id="L92">				.getEspaceColorimetrique();</span>
+
+<span class="nc" id="L94">		String nomComposante0 = espaceColorimetrique.getNomComposante0();</span>
+<span class="nc" id="L95">		String nomComposante1 = espaceColorimetrique.getNomComposante1();</span>
+<span class="nc" id="L96">		String nomComposante2 = espaceColorimetrique.getNomComposante2();</span>
+
+<span class="nc" id="L98">		int composante0 = choixCouleur.getComposante0();</span>
+<span class="nc" id="L99">		int composante1 = choixCouleur.getComposante1();</span>
+<span class="nc" id="L100">		int composante2 = choixCouleur.getComposante2();</span>
+
+<span class="nc" id="L102">		labelComposante0 = new JLabel(nomComposante0);</span>
+<span class="nc" id="L103">		labelComposante1 = new JLabel(nomComposante1);</span>
+<span class="nc" id="L104">		labelComposante2 = new JLabel(nomComposante2);</span>
+
+<span class="nc" id="L106">		sliderComposante0 = new JSlider(JSlider.HORIZONTAL, 0, 255, composante0);</span>
+<span class="nc" id="L107">		sliderComposante1 = new JSlider(JSlider.HORIZONTAL, 0, 255, composante1);</span>
+<span class="nc" id="L108">		sliderComposante2 = new JSlider(JSlider.HORIZONTAL, 0, 255, composante2);</span>
+
+<span class="nc" id="L110">		SpinnerModel modele0 = new ModeleSpinnerComposante(composante0);</span>
+<span class="nc" id="L111">		SpinnerModel modele1 = new ModeleSpinnerComposante(composante1);</span>
+<span class="nc" id="L112">		SpinnerModel modele2 = new ModeleSpinnerComposante(composante2);</span>
+
+<span class="nc" id="L114">		spinnerComposante0 = new JSpinner(modele0);</span>
+<span class="nc" id="L115">		spinnerComposante1 = new JSpinner(modele1);</span>
+<span class="nc" id="L116">		spinnerComposante2 = new JSpinner(modele2);</span>
+
+<span class="nc" id="L118">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterComposants() {
+
+<span class="nc" id="L125">		GridBagConstraints contraintes = new GridBagConstraints();</span>
+
+<span class="nc" id="L127">		contraintes.anchor = GridBagConstraints.LINE_START;</span>
+
+<span class="nc" id="L129">		Insets margeDefaut = contraintes.insets;</span>
+<span class="nc" id="L130">		Insets margeSliders = new Insets(5, 10, 5, 10);</span>
+
+		/*
+		 * la colonne des labels
+		 */
+
+<span class="nc" id="L136">		contraintes.gridx = 0;</span>
+
+<span class="nc" id="L138">		contraintes.gridy = 0;</span>
+<span class="nc" id="L139">		add(labelComposante0, contraintes);</span>
+<span class="nc" id="L140">		contraintes.gridy = 1;</span>
+<span class="nc" id="L141">		add(labelComposante1, contraintes);</span>
+<span class="nc" id="L142">		contraintes.gridy = 2;</span>
+<span class="nc" id="L143">		add(labelComposante2, contraintes);</span>
+
+		/*
+		 * la colonne des sliders
+		 */
+
+<span class="nc" id="L149">		contraintes.gridx = 1;</span>
+<span class="nc" id="L150">		contraintes.insets = margeSliders;</span>
+
+<span class="nc" id="L152">		contraintes.gridy = 0;</span>
+<span class="nc" id="L153">		add(sliderComposante0, contraintes);</span>
+<span class="nc" id="L154">		contraintes.gridy = 1;</span>
+<span class="nc" id="L155">		add(sliderComposante1, contraintes);</span>
+<span class="nc" id="L156">		contraintes.gridy = 2;</span>
+<span class="nc" id="L157">		add(sliderComposante2, contraintes);</span>
+
+<span class="nc" id="L159">		contraintes.insets = margeDefaut;</span>
+
+		/*
+		 * la colonne des spinners
+		 */
+
+<span class="nc" id="L165">		contraintes.gridx = 2;</span>
+
+<span class="nc" id="L167">		contraintes.gridy = 0;</span>
+<span class="nc" id="L168">		add(spinnerComposante0, contraintes);</span>
+<span class="nc" id="L169">		contraintes.gridy = 1;</span>
+<span class="nc" id="L170">		add(spinnerComposante1, contraintes);</span>
+<span class="nc" id="L171">		contraintes.gridy = 2;</span>
+<span class="nc" id="L172">		add(spinnerComposante2, contraintes);</span>
+
+<span class="nc" id="L174">	}</span>
+
+	/**
+	 * 
+	 * @param composante0
+	 * @param composante1
+	 */
+	public final void setComposantes01(int composante0, int composante1) {
+
+<span class="nc" id="L183">		composante0 = MathematiquesUtilitaire.borner(composante0, 0, 255);</span>
+<span class="nc" id="L184">		composante1 = MathematiquesUtilitaire.borner(composante1, 0, 255);</span>
+
+<span class="nc" id="L186">		sliderComposante0.setValue(composante0);</span>
+<span class="nc" id="L187">		spinnerComposante0.setValue(composante0);</span>
+
+<span class="nc" id="L189">		sliderComposante1.setValue(composante1);</span>
+<span class="nc" id="L190">		spinnerComposante1.setValue(composante1);</span>
+
+<span class="nc" id="L192">	}</span>
+
+	/**
+	 * 
+	 * @param composante2
+	 */
+	public final void setComposante2(int composante2) {
+
+<span class="nc" id="L200">		composante2 = MathematiquesUtilitaire.borner(composante2, 0, 255);</span>
+
+<span class="nc" id="L202">		sliderComposante2.setValue(composante2);</span>
+<span class="nc" id="L203">		spinnerComposante2.setValue(composante2);</span>
+
+<span class="nc" id="L205">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiserComposantes() {
+
+<span class="nc" id="L212">		int composante0 = choixCouleur.getComposante0();</span>
+<span class="nc" id="L213">		int composante1 = choixCouleur.getComposante1();</span>
+<span class="nc" id="L214">		int composante2 = choixCouleur.getComposante2();</span>
+
+<span class="nc" id="L216">		sliderComposante0.setValue(composante0);</span>
+<span class="nc" id="L217">		spinnerComposante0.setValue(composante0);</span>
+
+<span class="nc" id="L219">		sliderComposante1.setValue(composante1);</span>
+<span class="nc" id="L220">		spinnerComposante1.setValue(composante1);</span>
+
+<span class="nc" id="L222">		sliderComposante2.setValue(composante2);</span>
+<span class="nc" id="L223">		spinnerComposante2.setValue(composante2);</span>
+
+<span class="nc" id="L225">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterEcouteurs() {
+
+<span class="nc" id="L232">		new EcouteurSliderComposante(choixCouleur, sliderComposante0,</span>
+<span class="nc" id="L233">				spinnerComposante0, 0);</span>
+<span class="nc" id="L234">		new EcouteurSliderComposante(choixCouleur, sliderComposante1,</span>
+<span class="nc" id="L235">				spinnerComposante1, 1);</span>
+<span class="nc" id="L236">		new EcouteurSliderComposante(choixCouleur, sliderComposante2,</span>
+<span class="nc" id="L237">				spinnerComposante2, 2);</span>
+
+<span class="nc" id="L239">		new EcouteurSpinnerComposante(choixCouleur, spinnerComposante0,</span>
+<span class="nc" id="L240">				sliderComposante0, 0);</span>
+<span class="nc" id="L241">		new EcouteurSpinnerComposante(choixCouleur, spinnerComposante1,</span>
+<span class="nc" id="L242">				sliderComposante1, 1);</span>
+<span class="nc" id="L243">		new EcouteurSpinnerComposante(choixCouleur, spinnerComposante2,</span>
+<span class="nc" id="L244">				sliderComposante2, 2);</span>
+
+<span class="nc" id="L246">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

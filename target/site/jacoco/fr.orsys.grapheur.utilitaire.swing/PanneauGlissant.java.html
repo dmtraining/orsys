@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauGlissant.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.swing</a> &gt; <span class="el_source">PanneauGlissant.java</span></div><h1>PanneauGlissant.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.swing;
+
+/**
+ * Panneau ou l'on peut zoomer et dezoomer grace a la molette de la souris. On
+ * peut aussi le deplacerer en faisant un glisser-deposer avec la touche
+ * majuscule enfoncee.
+ * 
+ * @author guehenneux
+ * 
+ */
+public abstract class PanneauGlissant extends PanneauTampon {
+
+	/**
+	 * UID genere le 20/05/2010
+	 */
+	private static final long serialVersionUID = -7397292269032483654L;
+
+	protected float xCentrePanneau;
+	protected float yCentrePanneau;
+	protected int zoom;
+
+	protected int zoomMinimum;
+	protected int zoomMaximum;
+
+	/**
+	 * 
+	 * @param zoomMinimum
+	 * @param zoomMaximum
+	 */
+<span class="nc" id="L30">	public PanneauGlissant(int zoomMinimum, int zoomMaximum) {</span>
+
+<span class="nc" id="L32">		this.zoomMinimum = zoomMinimum;</span>
+<span class="nc" id="L33">		this.zoomMaximum = zoomMaximum;</span>
+
+<span class="nc" id="L35">		xCentrePanneau = 0;</span>
+<span class="nc" id="L36">		yCentrePanneau = 0;</span>
+<span class="nc" id="L37">		zoom = 0;</span>
+
+<span class="nc" id="L39">		setFocusable(true);</span>
+
+<span class="nc" id="L41">		EcouteurDeplacementPanneau ecouteurDeplacement = new EcouteurDeplacementPanneau(</span>
+<span class="nc" id="L42">				this);</span>
+
+<span class="nc" id="L44">		addMouseListener(ecouteurDeplacement);</span>
+<span class="nc" id="L45">		addMouseMotionListener(ecouteurDeplacement);</span>
+<span class="nc" id="L46">		addMouseWheelListener(ecouteurDeplacement);</span>
+<span class="nc" id="L47">		addKeyListener(ecouteurDeplacement);</span>
+
+<span class="nc" id="L49">	}</span>
+
+	/**
+	 * 
+	 */
+	public void validerDeplacement() {
+
+<span class="nc" id="L56">		deplacerFenetre(-xImage, -yImage);</span>
+
+<span class="nc" id="L58">		xImage = 0;</span>
+<span class="nc" id="L59">		yImage = 0;</span>
+
+<span class="nc" id="L61">	}</span>
+
+	/**
+	 * 
+	 * @param dx
+	 *            deplacement horizontal en pixels (vers la droite)
+	 * @param dy
+	 *            deplacement vertical en pixels (vers le bas)
+	 */
+	public void deplacerFenetre(int dx, int dy) {
+
+<span class="nc" id="L72">		float dxReel = (float) (dx / Math.pow(2, zoom));</span>
+<span class="nc" id="L73">		float dyReel = (float) (dy / Math.pow(2, zoom));</span>
+
+<span class="nc" id="L75">		xCentrePanneau += dxReel;</span>
+<span class="nc" id="L76">		yCentrePanneau += dyReel;</span>
+
+<span class="nc" id="L78">	}</span>
+
+	/**
+	 * 
+	 * @param xImage
+	 * @param yImage
+	 */
+	public void deplacerImage(int xImage, int yImage) {
+
+<span class="nc" id="L87">		this.xImage = xImage;</span>
+<span class="nc" id="L88">		this.yImage = yImage;</span>
+
+<span class="nc" id="L90">		repaint();</span>
+
+<span class="nc" id="L92">	}</span>
+
+	/**
+	 * @return the zoom
+	 */
+	public int getZoom() {
+<span class="nc" id="L98">		return zoom;</span>
+	}
+
+	/**
+	 * 
+	 * @param zoom
+	 * @param x
+	 * @param y
+	 */
+	public void setZoom(int zoom, int x, int y) {
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		if (zoom &lt; zoomMinimum) {</span>
+<span class="nc" id="L110">			zoom = zoomMinimum;</span>
+		}
+
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (zoom &gt; zoomMaximum) {</span>
+<span class="nc" id="L114">			zoom = zoomMaximum;</span>
+		}
+
+		/*
+		 * on recentre sur la selection
+		 */
+
+<span class="nc" id="L121">		deplacerFenetre(x - largeur / 2, y - hauteur / 2);</span>
+
+		/*
+		 * on applique le nouveau zoom
+		 */
+
+<span class="nc" id="L127">		this.zoom = zoom;</span>
+
+		/*
+		 * on recentre sur le curseur
+		 */
+
+<span class="nc" id="L133">		deplacerFenetre(largeur / 2 - x, hauteur / 2 - y);</span>
+
+<span class="nc" id="L135">		repaint();</span>
+
+<span class="nc" id="L137">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

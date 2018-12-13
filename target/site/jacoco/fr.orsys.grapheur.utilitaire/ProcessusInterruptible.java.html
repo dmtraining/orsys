@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ProcessusInterruptible.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire</a> &gt; <span class="el_source">ProcessusInterruptible.java</span></div><h1>ProcessusInterruptible.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire;
+
+/**
+ * @author GUEHENNEUX
+ */
+public abstract class ProcessusInterruptible extends Thread {
+
+	protected boolean demandeInterruption;
+	protected long dureeBoucle;
+	private Chronometre chronometre;
+
+	/**
+     * 
+     */
+	public ProcessusInterruptible() {
+<span class="nc" id="L16">		this(0);</span>
+<span class="nc" id="L17">	}</span>
+
+	/**
+	 * 
+	 * @param dureeBoucle
+	 */
+<span class="nc" id="L23">	public ProcessusInterruptible(long dureeBoucle) {</span>
+
+<span class="nc" id="L25">		demandeInterruption = false;</span>
+<span class="nc" id="L26">		this.dureeBoucle = dureeBoucle;</span>
+
+<span class="nc" id="L28">		chronometre = new Chronometre();</span>
+
+<span class="nc" id="L30">	}</span>
+
+	/**
+	 * demande l'interruption du processus
+	 */
+	public void interrompre() {
+<span class="nc" id="L36">		demandeInterruption = true;</span>
+<span class="nc" id="L37">	}</span>
+
+	@Override
+	public void run() {
+
+		float dureeBoucleInterneSecondes;
+		int dureeBoucleInterne;
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		while (!demandeInterruption) {</span>
+
+<span class="nc" id="L47">			chronometre.start(&quot;boucle&quot;);</span>
+<span class="nc" id="L48">			boucle();</span>
+<span class="nc" id="L49">			dureeBoucleInterneSecondes = chronometre.stop(&quot;boucle&quot;);</span>
+
+<span class="nc" id="L51">			dureeBoucleInterne = Math.round(dureeBoucleInterneSecondes</span>
+<span class="nc" id="L52">					* Chronometre.MILLISECONDES_PAR_SECONDE);</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">			if (dureeBoucleInterne &lt; dureeBoucle) {</span>
+
+				try {
+<span class="nc" id="L57">					sleep(dureeBoucle - dureeBoucleInterne);</span>
+<span class="nc" id="L58">				} catch (InterruptedException erreur) {</span>
+				}
+
+			}
+
+		}
+
+<span class="nc" id="L65">	}</span>
+
+	/**
+	 * effectue une iteration, l'iteration est l'operation atomique effectuee
+	 * par le processus et ne peut etre interrompue
+	 */
+	public abstract void boucle();
+
+	/**
+	 * @return the dureeBoucle
+	 */
+	public long getDureeBoucle() {
+<span class="nc" id="L77">		return dureeBoucle;</span>
+	}
+
+	/**
+	 * @param dureeBoucle
+	 *            the dureeBoucle to set
+	 */
+	public void setDureeBoucle(long dureeBoucle) {
+<span class="nc" id="L85">		this.dureeBoucle = dureeBoucle;</span>
+<span class="nc" id="L86">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

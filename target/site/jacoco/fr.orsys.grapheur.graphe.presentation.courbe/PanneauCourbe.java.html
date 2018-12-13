@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauCourbe.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.courbe</a> &gt; <span class="el_source">PanneauCourbe.java</span></div><h1>PanneauCourbe.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package fr.orsys.grapheur.graphe.presentation.courbe;</span>
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import fr.orsys.grapheur.graphe.Graphe;
+import fr.orsys.grapheur.graphe.courbe.Courbe;
+import fr.orsys.grapheur.graphe.presentation.equation.PanneauEquation;
+import fr.orsys.grapheur.utilitaire.couleur.choix.ChoixCouleur;
+
+/**
+ * panneau de parametrage d'une courbe
+ * 
+ * @author guehenneux
+ * 
+ */
+public abstract class PanneauCourbe extends JPanel {
+
+	/**
+	 * UID genere le 23/06/2010
+	 */
+	private static final long serialVersionUID = 5409727442726658863L;
+
+	private static final String TITRE = &quot;Propriétés de la courbe&quot;;
+	private static final String TITRE_PARAMETRES_GENERAUX = &quot;Paramètres généraux&quot;;
+	private static final String TITRE_DOMAINE = &quot;Domaine&quot;;
+	private static final String TITRE_FONCTION = &quot;Fonction&quot;;
+
+<span class="nc" id="L45">	private static final Color COULEUR_LABELS = Color.BLUE;</span>
+
+<span class="nc" id="L47">	private static final ChoixCouleur CHOIX_COULEUR_COURBE = new ChoixCouleur();</span>
+
+	private JPanel panneauParametresGeneraux;
+	private JPanel panneauDomaine;
+	private JPanel panneauFonctionEncadre;
+
+	private JLabel labelNom;
+	private JTextField champNom;
+
+	private JLabel labelType;
+	private JLabel champType;
+
+	private JLabel labelCouleur;
+	private JButton champCouleur;
+
+	private JLabel labelMin;
+	private JTextField champMin;
+
+	private JLabel labelMax;
+	private JTextField champMax;
+
+	private JLabel labelPas;
+	private JTextField champPas;
+
+	private JLabel labelInterpolee;
+	private JCheckBox champInterpolee;
+
+	protected PanneauEquation panneauEquation;
+
+	private Graphe graphe;
+	private Courbe courbe;
+
+	/**
+	 * 
+	 * @param courbe
+	 */
+<span class="nc" id="L83">	public PanneauCourbe(Courbe courbe) {</span>
+
+<span class="nc" id="L85">		this.courbe = courbe;</span>
+
+<span class="nc" id="L87">		Border bordure = BorderFactory.createTitledBorder(TITRE);</span>
+
+<span class="nc" id="L89">		setBorder(bordure);</span>
+
+<span class="nc" id="L91">		setLayout(new GridBagLayout());</span>
+
+<span class="nc" id="L93">		creerComposants();</span>
+<span class="nc" id="L94">		ajouterEcouteurs();</span>
+
+<span class="nc" id="L96">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+		/*
+		 * parametres generaux
+		 */
+
+<span class="nc" id="L107">		labelNom = new JLabel(&quot;Nom : &quot;);</span>
+<span class="nc" id="L108">		labelNom.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L109">		String nom = courbe.getNom();</span>
+<span class="nc" id="L110">		champNom = new JTextField(20);</span>
+<span class="nc" id="L111">		champNom.setText(nom);</span>
+
+<span class="nc" id="L113">		labelType = new JLabel(&quot;Type : &quot;);</span>
+<span class="nc" id="L114">		labelType.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L115">		String type = courbe.getType().toString();</span>
+<span class="nc" id="L116">		champType = new JLabel(type);</span>
+
+<span class="nc" id="L118">		labelCouleur = new JLabel(&quot;Couleur : &quot;);</span>
+<span class="nc" id="L119">		labelCouleur.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L120">		champCouleur = new JButton();</span>
+<span class="nc" id="L121">		Dimension tailleBouton = new Dimension(80, 20);</span>
+<span class="nc" id="L122">		champCouleur.setPreferredSize(tailleBouton);</span>
+<span class="nc" id="L123">		champCouleur.setMinimumSize(tailleBouton);</span>
+
+<span class="nc" id="L125">		actualiserCouleurCourbe();</span>
+
+<span class="nc" id="L127">		panneauParametresGeneraux = new JPanel();</span>
+<span class="nc" id="L128">		panneauParametresGeneraux.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L129">		panneauParametresGeneraux.setBorder(BorderFactory</span>
+<span class="nc" id="L130">				.createTitledBorder(TITRE_PARAMETRES_GENERAUX));</span>
+
+		/*
+		 * domaine
+		 */
+
+<span class="nc" id="L136">		double min = courbe.getMin();</span>
+<span class="nc" id="L137">		labelMin = new JLabel(&quot;Minimum : &quot;);</span>
+<span class="nc" id="L138">		labelMin.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L139">		champMin = new JTextField(15);</span>
+<span class="nc" id="L140">		champMin.setText(Double.toString(min));</span>
+
+<span class="nc" id="L142">		double max = courbe.getMax();</span>
+<span class="nc" id="L143">		labelMax = new JLabel(&quot;Maximum : &quot;);</span>
+<span class="nc" id="L144">		labelMax.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L145">		champMax = new JTextField(15);</span>
+<span class="nc" id="L146">		champMax.setText(Double.toString(max));</span>
+
+<span class="nc" id="L148">		double pas = courbe.getPas();</span>
+<span class="nc" id="L149">		labelPas = new JLabel(&quot;Pas : &quot;);</span>
+<span class="nc" id="L150">		labelPas.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L151">		champPas = new JTextField(10);</span>
+<span class="nc" id="L152">		champPas.setText(Double.toString(pas));</span>
+
+<span class="nc" id="L154">		boolean interpolee = courbe.isInterpolee();</span>
+<span class="nc" id="L155">		labelInterpolee = new JLabel(&quot;Interpolation : &quot;);</span>
+<span class="nc" id="L156">		labelInterpolee.setForeground(COULEUR_LABELS);</span>
+<span class="nc" id="L157">		champInterpolee = new JCheckBox();</span>
+<span class="nc" id="L158">		champInterpolee.setSelected(interpolee);</span>
+
+<span class="nc" id="L160">		panneauDomaine = new JPanel();</span>
+<span class="nc" id="L161">		panneauDomaine.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L162">		panneauDomaine.setBorder(BorderFactory</span>
+<span class="nc" id="L163">				.createTitledBorder(TITRE_DOMAINE));</span>
+
+		/*
+		 * fonction
+		 */
+
+<span class="nc" id="L169">		panneauFonctionEncadre = new JPanel();</span>
+
+<span class="nc" id="L171">		panneauFonctionEncadre.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L173">		Border bordurePanneauFonction = BorderFactory</span>
+<span class="nc" id="L174">				.createTitledBorder(TITRE_FONCTION);</span>
+
+<span class="nc" id="L176">		panneauFonctionEncadre.setBorder(bordurePanneauFonction);</span>
+
+<span class="nc" id="L178">	}</span>
+
+	/**
+	 * 
+	 */
+	protected final void ajouterComposants() {
+
+<span class="nc" id="L185">		GridBagConstraints contraintes = new GridBagConstraints();</span>
+
+<span class="nc" id="L187">		contraintes.anchor = GridBagConstraints.LINE_START;</span>
+<span class="nc" id="L188">		contraintes.insets = new Insets(2, 2, 2, 2);</span>
+
+		/*
+		 * parametres generaux
+		 */
+
+<span class="nc" id="L194">		contraintes.gridx = 0;</span>
+<span class="nc" id="L195">		contraintes.gridy = 0;</span>
+<span class="nc" id="L196">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L197">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L198">		panneauParametresGeneraux.add(labelNom, contraintes);</span>
+
+<span class="nc" id="L200">		contraintes.gridx = 1;</span>
+<span class="nc" id="L201">		contraintes.gridy = 0;</span>
+<span class="nc" id="L202">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L203">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L204">		panneauParametresGeneraux.add(champNom, contraintes);</span>
+
+<span class="nc" id="L206">		contraintes.gridx = 0;</span>
+<span class="nc" id="L207">		contraintes.gridy = 1;</span>
+<span class="nc" id="L208">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L209">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L210">		panneauParametresGeneraux.add(labelType, contraintes);</span>
+
+<span class="nc" id="L212">		contraintes.gridx = 1;</span>
+<span class="nc" id="L213">		contraintes.gridy = 1;</span>
+<span class="nc" id="L214">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L215">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L216">		panneauParametresGeneraux.add(champType, contraintes);</span>
+
+<span class="nc" id="L218">		contraintes.gridx = 0;</span>
+<span class="nc" id="L219">		contraintes.gridy = 2;</span>
+<span class="nc" id="L220">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L221">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L222">		panneauParametresGeneraux.add(labelCouleur, contraintes);</span>
+
+<span class="nc" id="L224">		contraintes.gridx = 1;</span>
+<span class="nc" id="L225">		contraintes.gridy = 2;</span>
+<span class="nc" id="L226">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L227">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L228">		panneauParametresGeneraux.add(champCouleur, contraintes);</span>
+
+		/*
+		 * domaine
+		 */
+
+<span class="nc" id="L234">		contraintes.gridx = 0;</span>
+<span class="nc" id="L235">		contraintes.gridy = 0;</span>
+<span class="nc" id="L236">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L237">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L238">		panneauDomaine.add(labelMin, contraintes);</span>
+
+<span class="nc" id="L240">		contraintes.gridx = 1;</span>
+<span class="nc" id="L241">		contraintes.gridy = 0;</span>
+<span class="nc" id="L242">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L243">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L244">		panneauDomaine.add(champMin, contraintes);</span>
+
+<span class="nc" id="L246">		contraintes.gridx = 0;</span>
+<span class="nc" id="L247">		contraintes.gridy = 1;</span>
+<span class="nc" id="L248">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L249">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L250">		panneauDomaine.add(labelMax, contraintes);</span>
+
+<span class="nc" id="L252">		contraintes.gridx = 1;</span>
+<span class="nc" id="L253">		contraintes.gridy = 1;</span>
+<span class="nc" id="L254">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L255">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L256">		panneauDomaine.add(champMax, contraintes);</span>
+
+<span class="nc" id="L258">		contraintes.gridx = 0;</span>
+<span class="nc" id="L259">		contraintes.gridy = 2;</span>
+<span class="nc" id="L260">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L261">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L262">		panneauDomaine.add(labelPas, contraintes);</span>
+
+<span class="nc" id="L264">		contraintes.gridx = 1;</span>
+<span class="nc" id="L265">		contraintes.gridy = 2;</span>
+<span class="nc" id="L266">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L267">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L268">		panneauDomaine.add(champPas, contraintes);</span>
+
+<span class="nc" id="L270">		contraintes.gridx = 0;</span>
+<span class="nc" id="L271">		contraintes.gridy = 3;</span>
+<span class="nc" id="L272">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L273">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L274">		panneauDomaine.add(labelInterpolee, contraintes);</span>
+
+<span class="nc" id="L276">		contraintes.gridx = 1;</span>
+<span class="nc" id="L277">		contraintes.gridy = 3;</span>
+<span class="nc" id="L278">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L279">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L280">		panneauDomaine.add(champInterpolee, contraintes);</span>
+
+		/*
+		 * fonction
+		 */
+
+<span class="nc" id="L286">		panneauFonctionEncadre.add(panneauEquation, BorderLayout.CENTER);</span>
+
+		/*
+		 * panneaux
+		 */
+
+<span class="nc" id="L292">		contraintes.gridx = 0;</span>
+<span class="nc" id="L293">		contraintes.gridy = 0;</span>
+<span class="nc" id="L294">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L295">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L296">		add(panneauParametresGeneraux, contraintes);</span>
+
+<span class="nc" id="L298">		contraintes.gridx = 1;</span>
+<span class="nc" id="L299">		contraintes.gridy = 0;</span>
+<span class="nc" id="L300">		contraintes.gridwidth = 1;</span>
+<span class="nc" id="L301">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L302">		add(panneauDomaine, contraintes);</span>
+
+<span class="nc" id="L304">		contraintes.gridx = 0;</span>
+<span class="nc" id="L305">		contraintes.gridy = 1;</span>
+<span class="nc" id="L306">		contraintes.gridwidth = 2;</span>
+<span class="nc" id="L307">		contraintes.gridheight = 1;</span>
+<span class="nc" id="L308">		contraintes.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L309">		add(panneauFonctionEncadre, contraintes);</span>
+
+<span class="nc" id="L311">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterEcouteurs() {
+
+<span class="nc" id="L318">		champCouleur.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L323">				Color couleurCourbe = courbe.getCouleur();</span>
+
+				try {
+
+<span class="nc" id="L327">					couleurCourbe = CHOIX_COULEUR_COURBE.ouvrirDialogue(</span>
+<span class="nc" id="L328">							PanneauCourbe.this, couleurCourbe);</span>
+
+<span class="nc" id="L330">				} catch (InterruptedException erreur) {</span>
+
+				}
+
+<span class="nc" id="L334">				courbe.setCouleur(couleurCourbe);</span>
+<span class="nc" id="L335">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L337">			}</span>
+
+		});
+
+<span class="nc" id="L341">		champNom.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L346">				String nom = champNom.getText();</span>
+<span class="nc" id="L347">				courbe.setNom(nom);</span>
+<span class="nc" id="L348">				graphe.actualiserListeCourbes();</span>
+
+<span class="nc" id="L350">			}</span>
+
+		});
+
+<span class="nc" id="L354">		champMin.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L359">				double min = Double.parseDouble(champMin.getText());</span>
+<span class="nc" id="L360">				courbe.setMin(min);</span>
+<span class="nc" id="L361">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L363">			}</span>
+
+		});
+
+<span class="nc" id="L367">		champMax.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L372">				double max = Double.parseDouble(champMax.getText());</span>
+<span class="nc" id="L373">				courbe.setMax(max);</span>
+<span class="nc" id="L374">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L376">			}</span>
+
+		});
+
+<span class="nc" id="L380">		champPas.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L385">				double pas = Double.parseDouble(champPas.getText());</span>
+<span class="nc" id="L386">				courbe.setPas(pas);</span>
+<span class="nc" id="L387">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L389">			}</span>
+
+		});
+
+<span class="nc" id="L393">		champInterpolee.addChangeListener(new ChangeListener() {</span>
+
+			@Override
+			public void stateChanged(ChangeEvent evenement) {
+
+<span class="nc" id="L398">				boolean interpolee = champInterpolee.isSelected();</span>
+<span class="nc" id="L399">				courbe.setInterpolee(interpolee);</span>
+<span class="nc" id="L400">				graphe.actualiserGraphe();</span>
+
+<span class="nc" id="L402">			}</span>
+
+		});
+
+<span class="nc" id="L406">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiserCouleurCourbe() {
+
+<span class="nc" id="L413">		Color couleurCourbe = courbe.getCouleur();</span>
+<span class="nc" id="L414">		champCouleur.setBackground(couleurCourbe);</span>
+
+<span class="nc" id="L416">	}</span>
+
+	/**
+	 * @param graphe
+	 *            the graphe to set
+	 */
+	public void setGraphe(Graphe graphe) {
+
+<span class="nc" id="L424">		this.graphe = graphe;</span>
+<span class="nc" id="L425">		panneauEquation.setGraphe(graphe);</span>
+
+<span class="nc" id="L427">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

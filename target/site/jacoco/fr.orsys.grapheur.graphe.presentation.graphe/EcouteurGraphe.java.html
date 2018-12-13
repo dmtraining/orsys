@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EcouteurGraphe.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.graphe</a> &gt; <span class="el_source">EcouteurGraphe.java</span></div><h1>EcouteurGraphe.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.graphe.presentation.graphe;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+
+import fr.orsys.grapheur.utilitaire.swing.SwingUtilitaire;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class EcouteurGraphe implements MouseListener, MouseMotionListener {
+
+	private static final int LONGUEUR_COINS_CADRE = 8;
+
+	private PanneauGraphe panneauGraphe;
+
+	private BufferedImage imageSansCadre;
+	private Graphics2D graphique;
+
+	private int x0, y0;
+	private int x1, y1;
+
+	/**
+	 * @param panneauGraphe
+	 */
+<span class="nc" id="L32">	public EcouteurGraphe(PanneauGraphe panneauGraphe) {</span>
+
+<span class="nc" id="L34">		this.panneauGraphe = panneauGraphe;</span>
+
+<span class="nc" id="L36">		panneauGraphe.addMouseListener(this);</span>
+<span class="nc" id="L37">		panneauGraphe.addMouseMotionListener(this);</span>
+
+<span class="nc" id="L39">	}</span>
+
+	@Override
+	public void mouseClicked(MouseEvent evenement) {
+
+<span class="nc" id="L44">	}</span>
+
+	@Override
+	public void mouseEntered(MouseEvent evenement) {
+
+<span class="nc" id="L49">	}</span>
+
+	@Override
+	public void mouseExited(MouseEvent evenement) {
+
+<span class="nc" id="L54">	}</span>
+
+	@Override
+	public void mousePressed(MouseEvent evenement) {
+
+<span class="nc" id="L59">		x0 = evenement.getX();</span>
+<span class="nc" id="L60">		y0 = evenement.getY();</span>
+
+<span class="nc" id="L62">		x1 = x0;</span>
+<span class="nc" id="L63">		y1 = y0;</span>
+
+<span class="nc" id="L65">		imageSansCadre = SwingUtilitaire.copier(panneauGraphe.getImage());</span>
+<span class="nc" id="L66">		graphique = panneauGraphe.getGraphique();</span>
+
+<span class="nc" id="L68">		dessinerCadreGrossissement(x0, y0, x1, y1);</span>
+
+<span class="nc" id="L70">	}</span>
+
+	@Override
+	public void mouseReleased(MouseEvent evenement) {
+
+<span class="nc bnc" id="L75" title="All 4 branches missed.">		if (x0 != x1 &amp;&amp; y0 != y1) {</span>
+
+<span class="nc" id="L77">			panneauGraphe.grossir(x0, y0, x1, y1);</span>
+
+<span class="nc" id="L79">		} else {</span>
+
+<span class="nc" id="L81">			panneauGraphe.setImageAJour(false);</span>
+<span class="nc" id="L82">			panneauGraphe.repaint();</span>
+
+		}
+
+<span class="nc" id="L86">	}</span>
+
+	@Override
+	public void mouseDragged(MouseEvent evenement) {
+
+<span class="nc" id="L91">		x1 = evenement.getX();</span>
+<span class="nc" id="L92">		y1 = evenement.getY();</span>
+
+<span class="nc" id="L94">		dessinerCadreGrossissement(x0, y0, x1, y1);</span>
+
+<span class="nc" id="L96">		panneauGraphe.actualiserCoordonneesCurseur(evenement.getX(), evenement</span>
+<span class="nc" id="L97">				.getY());</span>
+
+<span class="nc" id="L99">	}</span>
+
+	@Override
+	public void mouseMoved(MouseEvent evenement) {
+
+<span class="nc" id="L104">		panneauGraphe.actualiserCoordonneesCurseur(evenement.getX(), evenement</span>
+<span class="nc" id="L105">				.getY());</span>
+
+<span class="nc" id="L107">	}</span>
+
+	/**
+	 * 
+	 * @param x0
+	 * @param y0
+	 * @param x1
+	 * @param y1
+	 */
+	private final void dessinerCadreGrossissement(int x0, int y0, int x1, int y1) {
+
+<span class="nc" id="L118">		graphique.drawImage(imageSansCadre, 0, 0, null);</span>
+
+<span class="nc" id="L120">		graphique.setColor(Color.BLACK);</span>
+
+<span class="nc" id="L122">		int xMinCadre = Math.min(x0, x1);</span>
+<span class="nc" id="L123">		int yMinCadre = Math.min(y0, y1);</span>
+<span class="nc" id="L124">		int xMaxCadre = Math.max(x0, x1);</span>
+<span class="nc" id="L125">		int yMaxCadre = Math.max(y0, y1);</span>
+
+<span class="nc" id="L127">		graphique.drawLine(xMinCadre, yMinCadre, xMinCadre</span>
+<span class="nc" id="L128">				+ LONGUEUR_COINS_CADRE, yMinCadre);</span>
+<span class="nc" id="L129">		graphique.drawLine(xMinCadre, yMinCadre, xMinCadre, yMinCadre</span>
+<span class="nc" id="L130">				+ LONGUEUR_COINS_CADRE);</span>
+
+<span class="nc" id="L132">		graphique.drawLine(xMaxCadre, yMinCadre, xMaxCadre</span>
+<span class="nc" id="L133">				- LONGUEUR_COINS_CADRE, yMinCadre);</span>
+<span class="nc" id="L134">		graphique.drawLine(xMaxCadre, yMinCadre, xMaxCadre, yMinCadre</span>
+<span class="nc" id="L135">				+ LONGUEUR_COINS_CADRE);</span>
+
+<span class="nc" id="L137">		graphique.drawLine(xMaxCadre, yMaxCadre, xMaxCadre</span>
+<span class="nc" id="L138">				- LONGUEUR_COINS_CADRE, yMaxCadre);</span>
+<span class="nc" id="L139">		graphique.drawLine(xMaxCadre, yMaxCadre, xMaxCadre, yMaxCadre</span>
+<span class="nc" id="L140">				- LONGUEUR_COINS_CADRE);</span>
+
+<span class="nc" id="L142">		graphique.drawLine(xMinCadre, yMaxCadre, xMinCadre</span>
+<span class="nc" id="L143">				+ LONGUEUR_COINS_CADRE, yMaxCadre);</span>
+<span class="nc" id="L144">		graphique.drawLine(xMinCadre, yMaxCadre, xMinCadre, yMaxCadre</span>
+<span class="nc" id="L145">				- LONGUEUR_COINS_CADRE);</span>
+
+<span class="nc" id="L147">		panneauGraphe.repaint();</span>
+
+<span class="nc" id="L149">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

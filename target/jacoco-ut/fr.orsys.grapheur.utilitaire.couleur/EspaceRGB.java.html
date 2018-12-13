@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EspaceRGB.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.couleur</a> &gt; <span class="el_source">EspaceRGB.java</span></div><h1>EspaceRGB.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.couleur;
+
+import java.awt.Color;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class EspaceRGB extends EspaceColorimetrique {
+
+	private static EspaceRGB instance;
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static final synchronized EspaceRGB getInstance() {
+
+<span class="nc bnc" id="L20" title="All 2 branches missed.">		if (instance == null) {</span>
+<span class="nc" id="L21">			instance = new EspaceRGB();</span>
+		}
+
+<span class="nc" id="L24">		return instance;</span>
+
+	}
+
+	/**
+	 * 
+	 */
+	private EspaceRGB() {
+<span class="nc" id="L32">		super(&quot;RGB&quot;, &quot;Rouge&quot;, &quot;Vert&quot;, &quot;Bleu&quot;);</span>
+<span class="nc" id="L33">	}</span>
+
+	@Override
+	public Color getCouleur(int composante0, int composante1, int composante2) {
+<span class="nc" id="L37">		return new Color(composante0, composante1, composante2);</span>
+	}
+
+	@Override
+	public int[] getComposantes(Color couleur) {
+
+<span class="nc" id="L43">		return new int[] { couleur.getRed(), couleur.getGreen(),</span>
+<span class="nc" id="L44">				couleur.getBlue() };</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

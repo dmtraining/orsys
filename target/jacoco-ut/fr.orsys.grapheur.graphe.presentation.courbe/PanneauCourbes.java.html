@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauCourbes.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.graphe.presentation.courbe</a> &gt; <span class="el_source">PanneauCourbes.java</span></div><h1>PanneauCourbes.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package fr.orsys.grapheur.graphe.presentation.courbe;</span>
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import fr.orsys.grapheur.graphe.Graphe;
+import fr.orsys.grapheur.graphe.courbe.Courbe;
+import fr.orsys.grapheur.utilitaire.swing.PanneauVariable;
+
+/**
+ * 
+ * @author guehenneux
+ * 
+ */
+public class PanneauCourbes extends PanneauVariable {
+
+	/**
+	 * UID genere le 23/06/2010
+	 */
+	private static final long serialVersionUID = 7162369836022667540L;
+
+<span class="nc" id="L32">	private static final Dimension DIMENSION_PANNEAU_COURBE = new Dimension(</span>
+<span class="nc" id="L33">			512, 320);</span>
+
+	private JComboBox presentationCourbes;
+	private PanneauCourbe panneauCourbe;
+	private JScrollPane panneauCourbeAscenseurs;
+
+	private JPanel panneauBoutons;
+	private JButton ajouter;
+	private JButton supprimer;
+
+	private Graphe graphe;
+
+	/**
+	 * @param graphe
+	 */
+<span class="nc" id="L48">	public PanneauCourbes(Graphe graphe) {</span>
+
+<span class="nc" id="L50">		this.graphe = graphe;</span>
+
+<span class="nc" id="L52">		setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L54">		creerComposants();</span>
+<span class="nc" id="L55">		ajouterComposants();</span>
+<span class="nc" id="L56">		ajouterEcouteurs();</span>
+
+<span class="nc" id="L58">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void creerComposants() {
+
+<span class="nc" id="L65">		presentationCourbes = new JComboBox();</span>
+<span class="nc" id="L66">		presentationCourbes.setRenderer(RenduListeCourbes.getInstance());</span>
+
+<span class="nc" id="L68">		panneauCourbeAscenseurs = new JScrollPane();</span>
+<span class="nc" id="L69">		panneauCourbeAscenseurs.setPreferredSize(DIMENSION_PANNEAU_COURBE);</span>
+
+<span class="nc" id="L71">		panneauBoutons = new JPanel();</span>
+<span class="nc" id="L72">		ajouter = new JButton(&quot;Ajouter&quot;);</span>
+<span class="nc" id="L73">		supprimer = new JButton(&quot;Supprimer&quot;);</span>
+
+<span class="nc" id="L75">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterComposants() {
+
+<span class="nc" id="L82">		add(presentationCourbes, BorderLayout.NORTH);</span>
+
+<span class="nc" id="L84">		add(panneauCourbeAscenseurs, BorderLayout.CENTER);</span>
+
+<span class="nc" id="L86">		panneauBoutons.add(ajouter);</span>
+<span class="nc" id="L87">		panneauBoutons.add(supprimer);</span>
+<span class="nc" id="L88">		add(panneauBoutons, BorderLayout.SOUTH);</span>
+
+<span class="nc" id="L90">	}</span>
+
+	/**
+	 * 
+	 */
+	private final void ajouterEcouteurs() {
+
+		/*
+		 * lors de la selection d'une courbe dans la combo box, on supprime du
+		 * conteneur le panneau de la courbe precedemment selectionnee, et on
+		 * ajoute le nouveau
+		 */
+
+<span class="nc" id="L103">		presentationCourbes.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+<span class="nc" id="L107">				actualiserPanneauCourbe();</span>
+<span class="nc" id="L108">			}</span>
+
+		});
+
+<span class="nc" id="L112">		ajouter.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L117">				PresentationNouvelleCourbe presentationNouvelleCourbe = new PresentationNouvelleCourbe(</span>
+<span class="nc" id="L118">						PanneauCourbes.this);</span>
+
+<span class="nc" id="L120">				presentationNouvelleCourbe.setVisible(true);</span>
+
+<span class="nc" id="L122">				Courbe courbe = presentationNouvelleCourbe.getCourbe();</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">				if (courbe != null) {</span>
+
+<span class="nc" id="L126">					graphe.ajouterCourbe(courbe);</span>
+<span class="nc" id="L127">					presentationCourbes.setSelectedItem(courbe);</span>
+<span class="nc" id="L128">					graphe.actualiserGraphe();</span>
+
+				}
+
+<span class="nc" id="L132">			}</span>
+
+		});
+
+<span class="nc" id="L136">		supprimer.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent evenement) {
+
+<span class="nc" id="L141">				Courbe courbe = (Courbe) presentationCourbes.getSelectedItem();</span>
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">				if (courbe != null) {</span>
+<span class="nc" id="L144">					graphe.supprimerCourbe(courbe);</span>
+				}
+
+<span class="nc" id="L147">			}</span>
+
+		});
+
+<span class="nc" id="L151">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void initialiserListeCourbes() {
+
+<span class="nc" id="L158">		List&lt;Courbe&gt; listeCourbes = graphe.getCourbes();</span>
+<span class="nc" id="L159">		int nombreCourbes = listeCourbes.size();</span>
+<span class="nc" id="L160">		Courbe[] courbes = new Courbe[nombreCourbes];</span>
+<span class="nc" id="L161">		listeCourbes.toArray(courbes);</span>
+
+<span class="nc" id="L163">		ComboBoxModel modeleCourbes = new DefaultComboBoxModel(courbes);</span>
+
+<span class="nc" id="L165">		presentationCourbes.setModel(modeleCourbes);</span>
+
+<span class="nc" id="L167">		actualiserPanneauCourbe();</span>
+
+<span class="nc" id="L169">	}</span>
+
+	/**
+	 * 
+	 * @param courbe
+	 */
+	public final void ajouterCourbe(Courbe courbe) {
+<span class="nc" id="L176">		presentationCourbes.addItem(courbe);</span>
+<span class="nc" id="L177">	}</span>
+
+	/**
+	 * 
+	 * @param courbe
+	 */
+	public final void supprimerCourbe(Courbe courbe) {
+<span class="nc" id="L184">		presentationCourbes.removeItem(courbe);</span>
+<span class="nc" id="L185">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void actualiserPanneauCourbe() {
+
+<span class="nc" id="L192">		Courbe courbeSelectionnee = (Courbe) presentationCourbes</span>
+<span class="nc" id="L193">				.getSelectedItem();</span>
+
+<span class="nc bnc" id="L195" title="All 2 branches missed.">		if (panneauCourbeAscenseurs != null) {</span>
+<span class="nc" id="L196">			remove(panneauCourbeAscenseurs);</span>
+		}
+
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		if (courbeSelectionnee != null) {</span>
+
+<span class="nc" id="L201">			panneauCourbe = courbeSelectionnee.getPresentation();</span>
+<span class="nc" id="L202">			panneauCourbe.setGraphe(graphe);</span>
+
+<span class="nc" id="L204">			panneauCourbeAscenseurs = new JScrollPane(panneauCourbe);</span>
+<span class="nc" id="L205">			panneauCourbeAscenseurs.setPreferredSize(DIMENSION_PANNEAU_COURBE);</span>
+
+<span class="nc" id="L207">			add(panneauCourbeAscenseurs, BorderLayout.CENTER);</span>
+
+		}
+
+<span class="nc" id="L211">		revalidate();</span>
+<span class="nc" id="L212">		repaint();</span>
+
+<span class="nc" id="L214">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void redessinerListeCourbes() {
+<span class="nc" id="L220">		presentationCourbes.repaint();</span>
+<span class="nc" id="L221">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

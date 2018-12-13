@@ -1,0 +1,283 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Grapheur,default,jjtree,6,0,0,0,0,0,2,0,2,0
+Grapheur,default,javacc,6,0,0,0,0,0,2,0,2,0
+Grapheur,default,jjdoc,6,0,0,0,0,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationParametrique,157,0,0,0,42,0,4,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationPolaire,95,0,0,0,27,0,4,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationParametrique.new ActionListener() {...},29,0,0,0,10,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationParametrique.new ActionListener() {...},29,0,0,0,10,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationCartesienne,98,0,0,0,28,0,4,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationPolaire.new ActionListener() {...},29,0,0,0,10,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquationCartesienne.new ActionListener() {...},29,0,0,0,10,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.equation,PanneauEquation,7,0,0,0,3,0,2,0,2,0
+Grapheur,org.javacc.parser,Main,529,0,24,0,0,0,17,0,5,0
+Grapheur,org.javacc.parser,JavaCCParserTokenManager,9695,0,1285,0,0,0,891,0,49,0
+Grapheur,org.javacc.parser,ROneOrMore,47,0,0,0,0,0,3,0,3,0
+Grapheur,org.javacc.parser,Phase3Data,9,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,Semanticize.EmptyChecker,46,0,14,0,0,0,10,0,3,0
+Grapheur,org.javacc.parser,TokenProduction,48,0,0,0,0,0,6,0,6,0
+Grapheur,org.javacc.parser,Semanticize.ProductionDefinedChecker,45,0,6,0,0,0,6,0,3,0
+Grapheur,org.javacc.parser,BNFProduction,18,0,0,0,0,0,4,0,4,0
+Grapheur,org.javacc.parser,Options,818,0,84,0,0,0,88,0,46,0
+Grapheur,org.javacc.parser,JavaCharStream,1317,0,99,0,0,0,97,0,39,0
+Grapheur,org.javacc.parser,ZeroOrOne,49,0,2,0,0,0,4,0,3,0
+Grapheur,org.javacc.parser,RJustName,22,0,0,0,0,0,3,0,3,0
+Grapheur,org.javacc.parser,RegularExpression,40,0,0,0,0,0,3,0,3,0
+Grapheur,org.javacc.parser,RZeroOrOne,31,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.parser,RZeroOrMore,50,0,0,0,0,0,3,0,3,0
+Grapheur,org.javacc.parser,ZeroOrMore,50,0,2,0,0,0,4,0,3,0
+Grapheur,org.javacc.parser,Sequence,82,0,4,0,0,0,5,0,3,0
+Grapheur,org.javacc.parser,SingleCharacter,23,0,0,0,0,0,6,0,6,0
+Grapheur,org.javacc.parser,JavaCCParser.JJCalls,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,Container,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,RRepetitionRange,72,0,8,0,0,0,6,0,2,0
+Grapheur,org.javacc.parser,Token,40,0,2,0,0,0,8,0,7,0
+Grapheur,org.javacc.parser,OtherFilesGen,381,0,38,0,0,0,22,0,3,0
+Grapheur,org.javacc.parser,Lookahead,71,0,4,0,0,0,11,0,9,0
+Grapheur,org.javacc.parser,Choice,92,0,4,0,0,0,8,0,6,0
+Grapheur,org.javacc.parser,OutputFile,516,0,36,0,0,0,29,0,11,0
+Grapheur,org.javacc.parser,LookaheadCalc,902,0,92,0,0,0,55,0,9,0
+Grapheur,org.javacc.parser,ParseEngine,3850,0,431,0,0,0,239,0,20,0
+Grapheur,org.javacc.parser,Token.GTToken,8,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,RStringLiteral,3941,0,536,0,0,0,292,0,24,0
+Grapheur,org.javacc.parser,Semanticize.FixRJustNames,96,0,16,0,0,0,11,0,3,0
+Grapheur,org.javacc.parser,Semanticize.LookaheadChecker,115,0,40,0,0,0,24,0,4,0
+Grapheur,org.javacc.parser,JavaCCParserConstants,576,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,LexGen,5255,0,517,0,0,0,278,0,18,0
+Grapheur,org.javacc.parser,JavaCCErrors,249,0,12,0,0,0,20,0,14,0
+Grapheur,org.javacc.parser,MetaParseException,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,ParseGen,2531,0,210,0,0,0,108,0,3,0
+Grapheur,org.javacc.parser,OutputFile.NullOutputStream,6,0,0,0,0,0,4,0,4,0
+Grapheur,org.javacc.parser,OneOrMore,50,0,2,0,0,0,4,0,3,0
+Grapheur,org.javacc.parser,Nfa,22,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.parser,TryBlock,32,0,2,0,0,0,3,0,2,0
+Grapheur,org.javacc.parser,OutputFile.TrapClosePrintWriter,29,0,0,0,0,0,3,0,3,0
+Grapheur,org.javacc.parser,Action,35,0,2,0,0,0,4,0,3,0
+Grapheur,org.javacc.parser,CharacterRange,59,0,2,0,0,0,11,0,10,0
+Grapheur,org.javacc.parser,REndOfFile,5,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.parser,RChoice,302,0,44,0,0,0,29,0,7,0
+Grapheur,org.javacc.parser,NormalProduction,206,0,6,0,0,0,33,0,30,0
+Grapheur,org.javacc.parser,JavaCCParser.LookaheadSuccess,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,JavaFiles,1017,0,114,0,0,0,68,0,11,0
+Grapheur,org.javacc.parser,Expansion,116,0,2,0,0,0,13,0,12,0
+Grapheur,org.javacc.parser,JavaCCGlobals,1168,0,150,0,0,0,98,0,23,0
+Grapheur,org.javacc.parser,Semanticize.LookaheadFixer,161,0,18,0,0,0,12,0,3,0
+Grapheur,org.javacc.parser,LookaheadWalk,531,0,76,0,0,0,44,0,6,0
+Grapheur,org.javacc.parser,MatchInfo,10,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.parser,JavaCCParser,20403,0,2922,0,0,0,2087,0,535,0
+Grapheur,org.javacc.parser,Semanticize,1708,0,282,0,0,0,152,0,11,0
+Grapheur,org.javacc.parser,RCharacterList,7015,0,126,0,0,0,74,0,11,0
+Grapheur,org.javacc.parser,TokenMgrError,173,0,18,0,0,0,19,0,6,0
+Grapheur,org.javacc.parser,JavaCCParserInternals,781,0,112,0,0,0,76,0,20,0
+Grapheur,org.javacc.parser,ExpansionTreeWalker,351,0,80,0,0,0,43,0,3,0
+Grapheur,org.javacc.parser,KindInfo,67,0,0,0,0,0,3,0,3,0
+Grapheur,org.javacc.parser,RegExprSpec,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.parser,ParseException,398,0,34,0,0,0,26,0,5,0
+Grapheur,org.javacc.parser,NfaState,8159,0,1284,0,0,0,713,0,71,0
+Grapheur,org.javacc.parser,RSequence,93,0,4,0,0,0,5,0,3,0
+Grapheur,org.javacc.parser,JavaCodeProduction,11,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.parser,NonTerminal,54,0,0,0,0,0,10,0,10,0
+Grapheur,org.javacc.parser,JavaCCParser.ModifierSet,97,0,22,0,0,0,24,0,13,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Atan,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Ln,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Cos,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Tan,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Sqrt,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Sh,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Exp,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Tanh,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Ch,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Pow,34,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.dictionnaire,Sin,26,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe,Graphe,116,0,0,0,44,0,20,0,20,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,FenetreApplication,37,0,2,0,13,0,3,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,PanneauTampon,176,0,12,0,53,0,20,0,14,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,LabelComposant,56,0,4,0,18,0,7,0,5,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,EcouteurDeplacementPanneau,130,0,14,0,46,0,20,0,13,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,Rafrachissement,14,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,FenetrePleinEcran,16,0,0,0,7,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,PanneauVariable,23,0,6,0,8,0,5,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,PanneauGlissant,146,0,4,0,37,0,8,0,6,0
+Grapheur,fr.orsys.grapheur.utilitaire.swing,SwingUtilitaire,19,0,0,0,5,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFParenthesized,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,JJTreeParser.LookaheadSuccess,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,ASTRE,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTGrammar,30,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFAssignment,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,NodeFiles,569,0,38,0,0,0,31,0,12,0
+Grapheur,org.javacc.jjtree,JavaCharStream,1317,0,99,0,0,0,97,0,39,0
+Grapheur,org.javacc.jjtree,JJTreeParserTreeConstants,172,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,JJTreeIOException,4,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,JJTreeOptions,187,0,12,0,0,0,27,0,21,0
+Grapheur,org.javacc.jjtree,JJTreeParser.JJCalls,3,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,JJTreeParserConstants,564,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,TokenUtils,492,0,90,0,0,0,53,0,8,0
+Grapheur,org.javacc.jjtree,ASTREZeroOrMore,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,JJTreeState,534,0,28,0,0,0,19,0,5,0
+Grapheur,org.javacc.jjtree,JJTreeParserTokenManager,9581,0,1277,0,0,0,880,0,46,0
+Grapheur,org.javacc.jjtree,ASTCompilationUnit,110,0,14,0,0,0,9,0,2,0
+Grapheur,org.javacc.jjtree,JJTreeNode,340,0,50,0,0,0,43,0,18,0
+Grapheur,org.javacc.jjtree,ASTREReference,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFSequence,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTRESequence,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTREOneOrMore,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTREStringLiteral,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTLHS,30,0,2,0,0,0,3,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFZeroOrMore,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,Token,40,0,2,0,0,0,8,0,7,0
+Grapheur,org.javacc.jjtree,ASTExpansionNodeScope,36,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTREZeroOrOne,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFAction,109,0,30,0,0,0,18,0,3,0
+Grapheur,org.javacc.jjtree,ASTOptions,4,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,IO,285,0,20,0,0,0,24,0,14,0
+Grapheur,org.javacc.jjtree,ASTBNFNonTerminal,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFTryBlock,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,Token.GTToken,8,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,ParseException,398,0,34,0,0,0,26,0,5,0
+Grapheur,org.javacc.jjtree,ASTREParenthesized,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFLookahead,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFChoice,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTCharDescriptor,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTPrimaryExpression,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,Main,14,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTRRepetitionRange,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTTokenDecls,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTRESpec,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTNodeDescriptor,263,0,20,0,0,0,26,0,16,0
+Grapheur,org.javacc.jjtree,JJTJJTreeParserState,230,0,10,0,0,0,17,0,12,0
+Grapheur,org.javacc.jjtree,NodeScope,878,0,60,0,0,0,47,0,17,0
+Grapheur,org.javacc.jjtree,SimpleNode,132,0,12,0,0,0,20,0,14,0
+Grapheur,org.javacc.jjtree,ASTRENamed,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFOneOrMore,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,JJTreeParser,21958,0,3233,0,0,0,2234,0,526,0
+Grapheur,org.javacc.jjtree,JJTreeGlobals,121,0,0,0,0,0,4,0,4,0
+Grapheur,org.javacc.jjtree,ASTNodeDescriptorExpression,8,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,TokenMgrError,173,0,18,0,0,0,19,0,6,0
+Grapheur,org.javacc.jjtree,ASTBNF,27,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTRECharList,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTREChoice,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTREEOF,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTProductions,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTBNFNodeScope,33,0,2,0,0,0,3,0,2,0
+Grapheur,org.javacc.jjtree,ASTOptionBinding,35,0,4,0,0,0,7,0,5,0
+Grapheur,org.javacc.jjtree,JJTree,451,0,10,0,0,0,10,0,5,0
+Grapheur,org.javacc.jjtree,ASTBNFZeroOrOne,9,0,0,0,0,0,2,0,2,0
+Grapheur,org.javacc.jjtree,ASTJavacodeBody,55,0,4,0,0,0,4,0,2,0
+Grapheur,org.javacc.jjtree,ASTJavacode,4,0,0,0,0,0,1,0,1,0
+Grapheur,org.javacc.jjtree,ASTBNFDeclaration,52,0,6,0,0,0,5,0,2,0
+Grapheur,org.javacc.jjtree,ASTProduction,45,0,2,0,0,0,3,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.mathematiques,MathematiquesUtilitaire,35,19,4,2,9,6,5,2,3,1
+Grapheur,fr.orsys.grapheur.utilitaire.mathematiques,FractionLong,658,0,40,0,147,0,61,0,41,0
+Grapheur,fr.orsys.grapheur.utilitaire.mathematiques,BigFraction,639,0,34,0,148,0,58,0,41,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,EcouteurGraphe,222,0,4,0,55,0,11,0,9,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauGraphe,546,0,10,0,127,0,13,0,8,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PresentationGraphe,162,0,0,0,39,0,8,0,8,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauCoordonnees,67,0,0,0,16,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre,325,0,0,0,76,0,5,0,5,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre.new ActionListener() {...},22,0,0,0,7,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre.new ActionListener() {...},22,0,0,0,7,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.graphe,PanneauFenetre.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire,ProcessusInterruptible,64,0,4,0,22,0,8,0,6,0
+Grapheur,fr.orsys.grapheur.utilitaire,Chronometre,59,0,2,0,17,0,6,0,5,0
+Grapheur,fr.orsys.grapheur.utilitaire,StringUtilitaire,72,463,11,9,20,115,8,8,2,4
+Grapheur,fr.orsys.grapheur.utilitaire,RessourceUtilitaire,11,0,0,0,3,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.utilitaire,ListeUtilitaire,20,19,1,1,6,6,4,2,3,2
+Grapheur,fr.orsys.grapheur.utilitaire,GestionnaireException,72,0,2,0,18,0,3,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire,RegexUtilitaire,153,0,6,0,26,0,7,0,4,0
+Grapheur,fr.orsys.grapheur.utilitaire,ErreurUtilitaire,19,0,4,0,7,0,4,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.equation,EquationPolaire,18,0,0,0,7,0,4,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.equation,EquationParametrique,33,0,0,0,12,0,7,0,7,0
+Grapheur,fr.orsys.grapheur.graphe.equation,EquationCartesienne,18,0,0,0,7,0,4,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Addition,42,0,0,0,5,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,FonctionParametree,78,0,6,0,18,0,6,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,FonctionAbstraite,3,0,0,0,1,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Division,42,0,0,0,5,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Constante,13,0,0,0,5,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Identite,11,0,0,0,5,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Opposition,27,0,0,0,4,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Soustraction,42,0,0,0,5,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.fonction,Multiplication,42,0,0,0,5,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,CourbeAbstraite,88,0,0,0,33,0,17,0,17,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,CourbeParametrique,119,0,6,0,28,0,10,0,7,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,TypeCourbe,69,0,0,0,9,0,5,0,5,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,CourbePolaire,143,0,6,0,34,0,10,0,7,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,CourbeCartesienne,104,0,6,0,25,0,10,0,7,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,TypeCourbe.new TypeCourbe() {...},27,0,0,0,10,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,TypeCourbe.new TypeCourbe() {...},27,0,0,0,9,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.courbe,TypeCourbe.new TypeCourbe() {...},32,0,0,0,11,0,2,0,2,0
+Grapheur,org.javacc,JavaCCTestCase,11,0,0,0,0,0,4,0,4,0
+Grapheur,org.javacc,Version,74,0,4,0,0,0,4,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.apparence,LookAndFeelUtilitaire,60,0,6,0,16,0,6,0,3,0
+Grapheur,fr.orsys.grapheur.utilitaire.apparence,EcouteurChangementLnf,45,0,4,0,14,0,4,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.apparence,MenuLookAndFeel,170,0,12,0,42,0,9,0,3,0
+Grapheur,fr.orsys.grapheur.utilitaire.apparence,BoutonLookAndFeel,25,0,2,0,10,0,3,0,2,0
+Grapheur,org.javacc.utils,JavaFileGenerator,495,0,84,0,0,0,53,0,11,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,EcouteurChoixCouleur2,39,0,0,0,18,0,9,0,9,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauChoixCouleur1,124,0,4,0,33,0,8,0,6,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauChoixCouleur2,164,0,6,0,37,0,9,0,6,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,EcouteurChoixCouleur1,34,0,0,0,17,0,9,0,9,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauEchantillons,35,0,2,0,8,0,2,0,1,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauComposantes,404,0,0,0,102,0,8,0,8,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauApercuCouleur,90,0,0,0,22,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauChoixCouleur,342,0,0,0,101,0,13,0,13,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauValidationCouleur.new ActionListener() {...},11,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauValidationCouleur.new ActionListener() {...},11,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauValidationCouleur.new ActionListener() {...},11,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauValidationCouleur,69,0,0,0,18,0,4,0,4,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,ModeleSpinnerComposante,7,0,0,0,2,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,EcouteurChangementEspaceColorimetrique,22,0,0,0,9,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,ChoixCouleur,269,0,8,0,73,0,26,0,21,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PresentationEchantillon,56,0,0,0,15,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PresentationEchantillon.new ActionListener() {...},10,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,EcouteurSliderComposante,34,0,0,0,11,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,EcouteurSpinnerComposante,35,0,0,0,11,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur.choix,PanneauParametresChoixCouleur,73,0,0,0,24,0,4,0,4,0
+Grapheur,org.javacc.jjdoc,JJDocGlobals,65,0,14,0,0,0,13,0,6,0
+Grapheur,org.javacc.jjdoc,JJDocOptions,45,0,0,0,0,0,7,0,7,0
+Grapheur,org.javacc.jjdoc,TextGenerator,211,0,12,0,0,0,32,0,26,0
+Grapheur,org.javacc.jjdoc,JJDoc,1258,0,158,0,0,0,97,0,18,0
+Grapheur,org.javacc.jjdoc,HTMLGenerator,392,0,24,0,0,0,35,0,23,0
+Grapheur,org.javacc.jjdoc,JJDocMain,410,0,20,0,0,0,14,0,4,0
+Grapheur,org.javacc.jjdoc,BNFGenerator,284,0,28,0,0,0,42,0,28,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur,CouleurUtilitaire,228,0,12,0,49,0,14,0,8,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur,EspaceColorimetrique,64,0,0,0,15,0,6,0,6,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur,EspaceHSV,95,0,2,0,21,0,5,0,4,0
+Grapheur,fr.orsys.grapheur.utilitaire.couleur,EspaceRGB,40,0,2,0,8,0,5,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbes.new ActionListener() {...},35,0,2,0,11,0,3,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbes.new ActionListener() {...},20,0,2,0,6,0,3,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbeParametrique,15,0,0,0,6,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbes,194,0,4,0,54,0,12,0,10,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,BoutonTypeCourbe,27,0,0,0,8,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbePolaire,15,0,0,0,5,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,BoutonTypeCourbe.new ActionListener() {...},10,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbes.new ActionListener() {...},10,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbeCartesienne,15,0,0,0,6,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe.new ActionListener() {...},21,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe.new ActionListener() {...},29,0,0,0,9,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe,642,0,0,0,164,0,7,0,7,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PresentationNouvelleCourbe.new ActionListener() {...},10,0,0,0,4,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PresentationNouvelleCourbe.new ActionListener() {...},14,0,0,0,5,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe.new ChangeListener() {...},21,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PanneauCourbe.new ActionListener() {...},22,0,0,0,6,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,RenduListeCourbes,43,0,4,0,14,0,6,0,4,0
+Grapheur,fr.orsys.grapheur.graphe.presentation.courbe,PresentationNouvelleCourbe,280,0,2,0,80,0,7,0,6,0
+Grapheur,fr.orsys.grapheur.utilitaire.introspection,IntrospectionUtilitaire,575,0,14,0,172,0,22,0,15,0
+Grapheur,fr.orsys.grapheur.utilitaire.introspection,ExceptionIntrospection,13,0,0,0,6,0,3,0,3,0
+Grapheur,fr.orsys.grapheur.utilitaire.multithreading,GestionnaireTache,59,0,6,0,12,0,6,0,3,0
+Grapheur,fr.orsys.grapheur.utilitaire.multithreading,ExecuteurTache,16,0,2,0,6,0,3,0,2,0
+Grapheur,fr.orsys.grapheur.graphe.fonction.fabrique,FabriqueFonction,115,0,2,0,33,0,12,0,11,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,CompilateurFonctionConstants,80,0,0,0,21,0,1,0,1,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,ErreurSyntaxe,180,0,10,0,29,0,8,0,3,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,ParseException,369,0,32,0,67,0,25,0,5,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,SimpleCharStream,1056,0,60,0,202,0,67,0,36,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,CompilateurFonction,942,0,84,0,200,0,71,0,25,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,CompilateurFonctionTokenManager,802,0,98,0,197,0,75,0,20,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,TokenMgrError,169,0,18,0,39,0,19,0,6,0
+Grapheur,fr.orsys.grapheur.graphe.grammaire,Token,34,0,0,0,12,0,7,0,7,0
+Grapheur,fr.orsys.grapheur.graphe.application,EditeurGraphe,18,0,0,0,7,0,2,0,2,0
+Grapheur,fr.orsys.grapheur.utilitaire.fichier,FichierUtilitaire,54,0,4,0,16,0,6,0,4,0

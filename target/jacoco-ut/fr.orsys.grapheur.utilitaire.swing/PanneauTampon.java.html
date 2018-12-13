@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PanneauTampon.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Grapheur</a> &gt; <a href="index.source.html" class="el_package">fr.orsys.grapheur.utilitaire.swing</a> &gt; <span class="el_source">PanneauTampon.java</span></div><h1>PanneauTampon.java</h1><pre class="source lang-java linenums">package fr.orsys.grapheur.utilitaire.swing;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.Timer;
+
+import javax.swing.JPanel;
+
+import fr.orsys.grapheur.utilitaire.Chronometre;
+
+/**
+ * @author GUEHENNEUX
+ */
+public abstract class PanneauTampon extends JPanel {
+
+	/**
+	 * UID genere le 20/05/2010
+	 */
+	private static final long serialVersionUID = -3130300621492240894L;
+
+<span class="nc" id="L23">	private static final Timer TIMER_RAFRAICHISSEMENT = new Timer();</span>
+
+	protected int xImage;
+	protected int yImage;
+	protected boolean imageAJour;
+
+	protected BufferedImage image;
+	protected Graphics2D graphique;
+
+	protected int largeur;
+	protected int hauteur;
+
+	private Rafrachissement rafraichissement;
+	private int rps;
+
+	private boolean anticrenelage;
+
+	/**
+	 * 
+	 */
+	public PanneauTampon() {
+<span class="nc" id="L44">		this(true);</span>
+<span class="nc" id="L45">	}</span>
+
+	/**
+	 * 
+	 * @param anticrenelage
+	 */
+<span class="nc" id="L51">	public PanneauTampon(boolean anticrenelage) {</span>
+
+<span class="nc" id="L53">		this.anticrenelage = anticrenelage;</span>
+
+<span class="nc" id="L55">		xImage = 0;</span>
+<span class="nc" id="L56">		yImage = 0;</span>
+
+<span class="nc" id="L58">		imageAJour = false;</span>
+
+<span class="nc" id="L60">	}</span>
+
+	@Override
+	public final void paint(Graphics g) {
+
+<span class="nc" id="L65">		int largeurPanneau = getWidth();</span>
+<span class="nc" id="L66">		int hauteurPanneau = getHeight();</span>
+
+<span class="nc bnc" id="L68" title="All 4 branches missed.">		if (image == null || largeurPanneau != largeur</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">				|| hauteurPanneau != hauteur) {</span>
+
+<span class="nc" id="L71">			creerImage(largeurPanneau, hauteurPanneau);</span>
+<span class="nc" id="L72">			imageAJour = false;</span>
+
+		}
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		if (imageAJour) {</span>
+
+<span class="nc" id="L78">			g.setColor(getBackground());</span>
+<span class="nc" id="L79">			g.fillRect(0, 0, largeurPanneau, hauteurPanneau);</span>
+
+<span class="nc" id="L81">		} else {</span>
+
+<span class="nc" id="L83">			graphique.setColor(getBackground());</span>
+<span class="nc" id="L84">			graphique.fillRect(0, 0, largeurPanneau, hauteurPanneau);</span>
+
+<span class="nc" id="L86">			dessiner();</span>
+
+<span class="nc" id="L88">			imageAJour = true;</span>
+
+		}
+
+<span class="nc" id="L92">		g.drawImage(image, xImage, yImage, null);</span>
+
+<span class="nc" id="L94">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void recalculerImage() {
+
+<span class="nc" id="L101">		imageAJour = false;</span>
+<span class="nc" id="L102">		repaint();</span>
+
+<span class="nc" id="L104">	}</span>
+
+	/**
+	 * 
+	 * @param largeur
+	 * @param hauteur
+	 */
+	public final void creerImage(int largeur, int hauteur) {
+
+<span class="nc" id="L113">		this.largeur = largeur;</span>
+<span class="nc" id="L114">		this.hauteur = hauteur;</span>
+
+<span class="nc" id="L116">		image = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_INT_ARGB);</span>
+
+<span class="nc" id="L118">		graphique = image.createGraphics();</span>
+
+<span class="nc" id="L120">		graphique.setRenderingHint(RenderingHints.KEY_ANTIALIASING,</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">				anticrenelage ? RenderingHints.VALUE_ANTIALIAS_ON</span>
+<span class="nc" id="L122">						: RenderingHints.VALUE_ANTIALIAS_OFF);</span>
+
+<span class="nc" id="L124">	}</span>
+
+	/**
+	 * 
+	 */
+	public abstract void dessiner();
+
+	/**
+	 * 
+	 */
+	public final void reprendreRafraichissementAutomatique() {
+<span class="nc" id="L135">		rafraichirAutomatiquement(rps);</span>
+<span class="nc" id="L136">	}</span>
+
+	/**
+	 * 
+	 * @param rps
+	 *            nombre de rafraichissements par seconde
+	 */
+	public final void rafraichirAutomatiquement(int rps) {
+
+<span class="nc" id="L145">		this.rps = rps;</span>
+
+<span class="nc" id="L147">		interrompreRafraichissementAutomatique();</span>
+
+<span class="nc" id="L149">		rafraichissement = new Rafrachissement(this);</span>
+
+<span class="nc" id="L151">		TIMER_RAFRAICHISSEMENT.schedule(rafraichissement, 0,</span>
+<span class="nc" id="L152">				Chronometre.MILLISECONDES_PAR_SECONDE / rps);</span>
+
+<span class="nc" id="L154">	}</span>
+
+	/**
+	 * 
+	 */
+	public final void interrompreRafraichissementAutomatique() {
+
+<span class="nc bnc" id="L161" title="All 2 branches missed.">		if (rafraichissement != null) {</span>
+<span class="nc" id="L162">			rafraichissement.cancel();</span>
+		}
+
+<span class="nc" id="L165">	}</span>
+
+	/**
+	 * @return the rps
+	 */
+	public final int getRps() {
+<span class="nc" id="L171">		return rps;</span>
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public final BufferedImage getImage() {
+<span class="nc" id="L179">		return image;</span>
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public final Graphics2D getGraphique() {
+<span class="nc" id="L187">		return graphique;</span>
+	}
+
+	/**
+	 * @return the imageAJour
+	 */
+	public final boolean isImageAJour() {
+<span class="nc" id="L194">		return imageAJour;</span>
+	}
+
+	/**
+	 * @param imageAJour
+	 *            the imageAJour to set
+	 */
+	public final void setImageAJour(boolean imageAJour) {
+<span class="nc" id="L202">		this.imageAJour = imageAJour;</span>
+<span class="nc" id="L203">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
